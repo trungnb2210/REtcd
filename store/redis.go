@@ -15,7 +15,7 @@ var ErrTxnFailed = errors.New("txn compare failed")
 
 // Event represents a single change record read from the Redis Stream.
 type Event struct {
-	Type string   // "PUT" or "DELETE"
+	Type string // "PUT" or "DELETE"
 	Key  string
 	Rev  int64
 	KV   *KeyValue // nil for DELETE events
@@ -140,7 +140,7 @@ type KeyValue struct {
 	Value          []byte `json:"value"`
 	CreateRevision int64  `json:"create_revision"`
 	ModRevision    int64  `json:"mod_revision"`
-	Version        int64  `json:"version"`  // increments on each modification
+	Version        int64  `json:"version"` // increments on each modification
 	Lease          int64  `json:"lease"`
 }
 
@@ -240,6 +240,13 @@ func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID 
 			"data": string(data),
 		},
 	})
+	// Update lease key-sets: detach from old lease, attach to new one.
+	if existing != nil && existing.Lease != 0 && existing.Lease != leaseID {
+		pipe.SRem(ctx, leaseKeysSetKey(existing.Lease), key)
+	}
+	if leaseID != 0 {
+		pipe.SAdd(ctx, leaseKeysSetKey(leaseID), key)
+	}
 	if _, err := pipe.Exec(ctx); err != nil {
 		return 0, nil, fmt.Errorf("pipeline exec: %w", err)
 	}
@@ -318,6 +325,9 @@ func (r *RedisStore) Delete(ctx context.Context, key string) (int64, *KeyValue, 
 			"rev":  rev,
 		},
 	})
+	if existing.Lease != 0 {
+		pipe.SRem(ctx, leaseKeysSetKey(existing.Lease), key)
+	}
 	if _, err := pipe.Exec(ctx); err != nil {
 		return 0, nil, fmt.Errorf("pipeline exec: %w", err)
 	}

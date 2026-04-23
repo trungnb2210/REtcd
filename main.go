@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
 
@@ -17,6 +18,7 @@ func main() {
 	}
 
 	rdb := store.NewRedisStore("localhost:6379")
+	rdb.StartLeaseReaper(context.Background())
 
 	grpcServer := grpc.NewServer()
 	pb.RegisterKVServer(grpcServer, server.NewKVServer(rdb))
