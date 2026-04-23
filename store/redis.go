@@ -13,6 +13,122 @@ import (
 // ErrTxnFailed is returned when a Txn compare condition is not satisfied.
 var ErrTxnFailed = errors.New("txn compare failed")
 
+// Event represents a single change record read from the Redis Stream.
+type Event struct {
+	Type string   // "PUT" or "DELETE"
+	Key  string
+	Rev  int64
+	KV   *KeyValue // nil for DELETE events
+}
+
+// StreamStartID returns the Redis Stream ID to start reading from for a given
+// etcd revision. We use "0" (beginning of stream) when startRevision <= 1,
+// otherwise we use the revision as a stream entry sequence hint.
+// Since we don't store a direct revision→streamID mapping, we read from the
+// beginning and skip entries with rev < startRevision.
+func StreamStartID(startRevision int64) string {
+	if startRevision <= 1 {
+		return "0"
+	}
+	return "0" // always read from start and filter — simple and correct
+}
+
+// ReadEvents reads up to maxCount events from the Redis Stream after lastID,
+// blocking up to blockMs milliseconds if no events are available.
+// Returns the events and the last stream ID read (to use as the next lastID).
+func (r *RedisStore) ReadEvents(ctx context.Context, lastID string, blockMs int, maxCount int64) ([]Event, string, error) {
+	results, err := r.client.XRead(ctx, &redis.XReadArgs{
+		Streams: []string{eventStream, lastID},
+		Count:   maxCount,
+		Block:   0, // non-blocking — we handle blocking in the caller loop
+	}).Result()
+
+	if err == redis.Nil {
+		return nil, lastID, nil
+	}
+	if err != nil {
+		return nil, lastID, fmt.Errorf("xread: %w", err)
+	}
+
+	var events []Event
+	newLastID := lastID
+
+	for _, stream := range results {
+		for _, msg := range stream.Messages {
+			newLastID = msg.ID
+			ev, err := parseStreamEvent(msg)
+			if err != nil {
+				continue // skip malformed events
+			}
+			events = append(events, ev)
+		}
+	}
+
+	return events, newLastID, nil
+}
+
+// BlockReadEvents blocks until at least one new event arrives after lastID,
+// or until ctx is cancelled. Uses XREAD BLOCK.
+func (r *RedisStore) BlockReadEvents(ctx context.Context, lastID string, maxCount int64) ([]Event, string, error) {
+	results, err := r.client.XRead(ctx, &redis.XReadArgs{
+		Streams: []string{eventStream, lastID},
+		Count:   maxCount,
+		Block:   5000, // block up to 5s then return empty so we can check ctx
+	}).Result()
+
+	if err == redis.Nil {
+		return nil, lastID, nil // timeout, no new events
+	}
+	if err != nil {
+		if ctx.Err() != nil {
+			return nil, lastID, ctx.Err()
+		}
+		return nil, lastID, fmt.Errorf("xread block: %w", err)
+	}
+
+	var events []Event
+	newLastID := lastID
+
+	for _, stream := range results {
+		for _, msg := range stream.Messages {
+			newLastID = msg.ID
+			ev, err := parseStreamEvent(msg)
+			if err != nil {
+				continue
+			}
+			events = append(events, ev)
+		}
+	}
+
+	return events, newLastID, nil
+}
+
+// parseStreamEvent converts a Redis Stream message to an Event.
+func parseStreamEvent(msg redis.XMessage) (Event, error) {
+	ev := Event{
+		Type: fmt.Sprintf("%v", msg.Values["type"]),
+		Key:  fmt.Sprintf("%v", msg.Values["key"]),
+	}
+
+	revStr := fmt.Sprintf("%v", msg.Values["rev"])
+	rev, err := strconv.ParseInt(revStr, 10, 64)
+	if err != nil {
+		return ev, fmt.Errorf("parse rev: %w", err)
+	}
+	ev.Rev = rev
+
+	if ev.Type == "PUT" {
+		dataStr := fmt.Sprintf("%v", msg.Values["data"])
+		var kv KeyValue
+		if err := json.Unmarshal([]byte(dataStr), &kv); err != nil {
+			return ev, fmt.Errorf("unmarshal kv: %w", err)
+		}
+		ev.KV = &kv
+	}
+
+	return ev, nil
+}
+
 const (
 	revisionKey = "global:revision"
 	eventStream = "events"
@@ -33,8 +149,15 @@ type RedisStore struct {
 }
 
 func NewRedisStore(addr string) *RedisStore {
+	return NewRedisStoreDB(addr, 0)
+}
+
+// NewRedisStoreDB connects to a specific Redis database number.
+// DB 0 is the default; use a non-zero DB (e.g. 15) in tests for isolation.
+func NewRedisStoreDB(addr string, db int) *RedisStore {
 	client := redis.NewClient(&redis.Options{
 		Addr: addr,
+		DB:   db,
 	})
 	return &RedisStore{client: client}
 }

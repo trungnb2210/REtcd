@@ -50,8 +50,10 @@ func (s *KVServer) Range(ctx context.Context, req *pb.RangeRequest) (*pb.RangeRe
 		Header: s.header(ctx),
 		Count:  int64(len(kvs)),
 	}
-	for _, kv := range kvs {
-		resp.Kvs = append(resp.Kvs, toProtoKV(kv))
+	if !req.CountOnly {
+		for _, kv := range kvs {
+			resp.Kvs = append(resp.Kvs, toProtoKV(kv))
+		}
 	}
 	return resp, nil
 }
