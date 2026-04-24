@@ -72,8 +72,9 @@ func (s *WatchServer) Watch(stream pb.Watch_WatchServer) error {
 			mu.Unlock()
 
 			// Confirm watch creation to the client immediately.
+			rev, _ := s.store.CurrentRevision(ctx)
 			_ = sender.Send(&pb.WatchResponse{
-				Header:  &pb.ResponseHeader{ClusterId: 1, MemberId: 1},
+				Header:  &pb.ResponseHeader{ClusterId: 1, MemberId: 1, Revision: rev},
 				Created: true,
 				WatchId: id,
 			})
@@ -170,6 +171,9 @@ func eventToWatchResponse(id int64, ev store.Event) *pb.WatchResponse {
 		eventType = mvccpb.PUT
 		if ev.KV != nil {
 			kv = toProtoKV(ev.KV)
+		}
+		if ev.PrevKV != nil {
+			prevKV = toProtoKV(ev.PrevKV)
 		}
 	case "DELETE":
 		eventType = mvccpb.DELETE

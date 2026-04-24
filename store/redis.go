@@ -15,10 +15,11 @@ var ErrTxnFailed = errors.New("txn compare failed")
 
 // Event represents a single change record read from the Redis Stream.
 type Event struct {
-	Type string // "PUT" or "DELETE"
-	Key  string
-	Rev  int64
-	KV   *KeyValue // nil for DELETE events
+	Type  string    // "PUT" or "DELETE"
+	Key   string
+	Rev   int64
+	KV    *KeyValue // nil for DELETE events
+	PrevKV *KeyValue // previous value before this PUT; nil for creates
 }
 
 // StreamStartID returns the Redis Stream ID to start reading from for a given
@@ -73,7 +74,7 @@ func (r *RedisStore) BlockReadEvents(ctx context.Context, lastID string, maxCoun
 	results, err := r.client.XRead(ctx, &redis.XReadArgs{
 		Streams: []string{eventStream, lastID},
 		Count:   maxCount,
-		Block:   5000, // block up to 5s then return empty so we can check ctx
+		Block:   500, // block up to 500ms then return empty so we can check ctx
 	}).Result()
 
 	if err == redis.Nil {
@@ -124,6 +125,16 @@ func parseStreamEvent(msg redis.XMessage) (Event, error) {
 			return ev, fmt.Errorf("unmarshal kv: %w", err)
 		}
 		ev.KV = &kv
+
+		if prevRaw, ok := msg.Values["prev_data"]; ok {
+			prevStr := fmt.Sprintf("%v", prevRaw)
+			if prevStr != "" && prevStr != "<nil>" {
+				var prevKV KeyValue
+				if err := json.Unmarshal([]byte(prevStr), &prevKV); err == nil {
+					ev.PrevKV = &prevKV
+				}
+			}
+		}
 	}
 
 	return ev, nil
@@ -159,6 +170,8 @@ func NewRedisStoreDB(addr string, db int) *RedisStore {
 		Addr: addr,
 		DB:   db,
 	})
+	// Ensure revision starts at 1 — etcd never returns revision 0.
+	client.SetNX(context.Background(), revisionKey, 1, 0)
 	return &RedisStore{client: client}
 }
 
@@ -179,7 +192,7 @@ func (r *RedisStore) incrRevision(ctx context.Context) (int64, error) {
 func (r *RedisStore) CurrentRevision(ctx context.Context) (int64, error) {
 	val, err := r.client.Get(ctx, revisionKey).Result()
 	if err == redis.Nil {
-		return 0, nil
+		return 1, nil // etcd revision starts at 1, never 0
 	}
 	if err != nil {
 		return 0, err
@@ -230,15 +243,20 @@ func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID 
 	pipe := r.client.Pipeline()
 	pipe.Set(ctx, redisKey(key), data, 0)
 	pipe.SAdd(ctx, "keyindex", key) // track all keys for range queries
+	streamValues := map[string]interface{}{
+		"type": "PUT",
+		"key":  key,
+		"rev":  rev,
+		"data": string(data),
+	}
+	if existing != nil {
+		prevData, _ := json.Marshal(existing)
+		streamValues["prev_data"] = string(prevData)
+	}
 	pipe.XAdd(ctx, &redis.XAddArgs{
 		Stream: eventStream,
 		ID:     "*", // auto-generate stream ID
-		Values: map[string]interface{}{
-			"type": "PUT",
-			"key":  key,
-			"rev":  rev,
-			"data": string(data),
-		},
+		Values: streamValues,
 	})
 	// Update lease key-sets: detach from old lease, attach to new one.
 	if existing != nil && existing.Lease != 0 && existing.Lease != leaseID {
@@ -399,11 +417,20 @@ else
 	local new_raw = cjson.encode(new_kv)
 	redis.call('SET',  KEYS[1], new_raw)
 	redis.call('SADD', KEYS[4], string.sub(KEYS[1], 4))
-	redis.call('XADD', KEYS[3], '*',
-		'type', 'PUT',
-		'key',  string.sub(KEYS[1], 4),
-		'rev',  tostring(new_rev),
-		'data', new_raw)
+	if current_raw then
+		redis.call('XADD', KEYS[3], '*',
+			'type',      'PUT',
+			'key',       string.sub(KEYS[1], 4),
+			'rev',       tostring(new_rev),
+			'data',      new_raw,
+			'prev_data', current_raw)
+	else
+		redis.call('XADD', KEYS[3], '*',
+			'type', 'PUT',
+			'key',  string.sub(KEYS[1], 4),
+			'rev',  tostring(new_rev),
+			'data', new_raw)
+	end
 end
 
 return {1, ''}

@@ -24,6 +24,7 @@ func main() {
 	pb.RegisterKVServer(grpcServer, server.NewKVServer(rdb))
 	pb.RegisterWatchServer(grpcServer, server.NewWatchServer(rdb))
 	pb.RegisterLeaseServer(grpcServer, server.NewLeaseServer(rdb))
+	pb.RegisterMaintenanceServer(grpcServer, server.NewMaintenanceServer(rdb))
 
 	log.Println("REtcd listening on :2379")
 	if err := grpcServer.Serve(lis); err != nil {
