@@ -48,8 +48,8 @@ The `Store` interface decouples the server layer from Redis. `*store.RedisStore`
 
 | Key | Type | Purpose |
 |-----|------|---------|
-| `kv:<etcd-key>` | String (JSON) | Serialized `KeyValue` per etcd key |
-| `keyindex` | Set | All live keys — used for prefix/range scans |
+| `kv:<etcd-key>` | String (binary) | Serialized `KeyValue` per etcd key |
+| `keyindex` | Sorted Set | All live keys — used for ordered prefix/range scans |
 | `global:revision` | String (int) | Monotonically increasing revision counter |
 | `events` | Stream | Ordered event log for Watch |
 
@@ -61,7 +61,7 @@ Each `Watch` gRPC stream spawns a goroutine per watch request that tails the `ev
 
 ### Range/prefix scan (`server/range.go`)
 
-etcd encodes a prefix scan as `key="/a/"`, `rangeEnd="/a0"` (last byte incremented). The server computes the common prefix of `key` and `rangeEnd`, calls `store.Range(prefix)`, then filters results to the exact `[key, rangeEnd)` window in Go. A special `rangeEnd="\x00"` means "all keys from key onwards".
+etcd encodes a prefix scan as `key="/a/"`, `rangeEnd="/a0"` (last byte incremented). The server computes the common prefix of `key` and `rangeEnd`, calls `store.Range(prefix)`, then filters results to the exact `[key, rangeEnd)` window in Go. `store.Range` uses Redis `ZRANGEBYLEX` over `keyindex` so prefix scans are ordered without scanning every live key. A special `rangeEnd="\x00"` means "all keys from key onwards".
 
 ### What is not implemented
 

@@ -6,6 +6,7 @@ package server_test
 import (
 	"context"
 	"fmt"
+	"sort"
 	"sync"
 
 	"github.com/trungnb2210/REtcd/store"
@@ -16,6 +17,13 @@ type fakeStore struct {
 	data   map[string]*store.KeyValue
 	rev    int64
 	events []store.Event // append-only event log
+
+	// Error injection for BlockReadEvents. failFirst causes the first N calls to
+	// return a transient error; failAll causes every call to error. blockCalls
+	// counts calls (for assertions).
+	failFirst  int
+	failAll    bool
+	blockCalls int
 }
 
 func newFakeStore() *fakeStore {
@@ -60,16 +68,22 @@ func (f *fakeStore) Get(_ context.Context, key string) (*store.KeyValue, error) 
 	return f.data[key], nil
 }
 
-func (f *fakeStore) Range(_ context.Context, prefix string) ([]*store.KeyValue, error) {
+func (f *fakeStore) Range(_ context.Context, prefix string) (int64, []*store.KeyValue, error) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	var out []*store.KeyValue
-	for k, v := range f.data {
+	var keys []string
+	for k := range f.data {
 		if prefix == "" || k == prefix || len(k) >= len(prefix) && k[:len(prefix)] == prefix {
-			out = append(out, v)
+			keys = append(keys, k)
 		}
 	}
-	return out, nil
+	sort.Strings(keys)
+
+	var out []*store.KeyValue
+	for _, k := range keys {
+		out = append(out, f.data[k])
+	}
+	return f.rev, out, nil
 }
 
 func (f *fakeStore) Delete(_ context.Context, key string) (int64, *store.KeyValue, error) {
@@ -138,6 +152,10 @@ func (f *fakeStore) CurrentRevision(_ context.Context) (int64, error) {
 func (f *fakeStore) BlockReadEvents(_ context.Context, lastID string, maxCount int64) ([]store.Event, string, error) {
 	f.mu.Lock()
 	defer f.mu.Unlock()
+	f.blockCalls++
+	if f.failAll || f.blockCalls <= f.failFirst {
+		return nil, lastID, fmt.Errorf("injected transient backend error")
+	}
 	if len(f.events) == 0 {
 		return nil, lastID, nil
 	}

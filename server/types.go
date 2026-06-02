@@ -13,7 +13,7 @@ import (
 type Store interface {
 	Put(ctx context.Context, key string, value []byte, leaseID int64) (int64, *store.KeyValue, error)
 	Get(ctx context.Context, key string) (*store.KeyValue, error)
-	Range(ctx context.Context, prefix string) ([]*store.KeyValue, error)
+	Range(ctx context.Context, prefix string) (int64, []*store.KeyValue, error)
 	Delete(ctx context.Context, key string) (int64, *store.KeyValue, error)
 	Txn(ctx context.Context, key string, expectedModRevision int64, successOp string, newValue []byte, leaseID int64) (*store.TxnResult, error)
 	CurrentRevision(ctx context.Context) (int64, error)

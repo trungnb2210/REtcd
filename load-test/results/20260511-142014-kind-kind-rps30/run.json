@@ -1,0 +1,85 @@
+{
+  "run_id": "cd20c404",
+  "started_at": "2026-05-11T13:20:14.120631+00:00",
+  "completed_at": "2026-05-11T13:22:06.025769+00:00",
+  "kube_context": "kind-kind",
+  "args": {
+    "target_rps": 30.0,
+    "duration_s": 30.0,
+    "warmup_s": 5.0,
+    "trials": 3,
+    "pod_lifetime_s": 1.0,
+    "namespace": "pods-namespace",
+    "out_dir": "results/20260511-142014-kind-kind-rps30",
+    "max_failure_rate": 0.01,
+    "drain_s": 30.0
+  },
+  "trials": [
+    {
+      "trial_idx": 0,
+      "csv": "trial-00.csv",
+      "pod_ids_attempted": 1085,
+      "counts_all": {
+        "create_ok": 0,
+        "create_conflict": 0,
+        "create_err": 1085,
+        "delete_ok": 0,
+        "delete_missing": 1085,
+        "delete_err": 0
+      },
+      "recorded_in_window": {
+        "create": 917,
+        "delete": 914
+      },
+      "failure_rate": 0.5,
+      "achieved_create_rate_per_s": 30.566666666666666,
+      "achieved_delete_rate_per_s": 30.466666666666665,
+      "max_in_flight": 48,
+      "valid": false
+    },
+    {
+      "trial_idx": 1,
+      "csv": "trial-01.csv",
+      "pod_ids_attempted": 1090,
+      "counts_all": {
+        "create_ok": 0,
+        "create_conflict": 0,
+        "create_err": 1090,
+        "delete_ok": 0,
+        "delete_missing": 1090,
+        "delete_err": 0
+      },
+      "recorded_in_window": {
+        "create": 926,
+        "delete": 925
+      },
+      "failure_rate": 0.5,
+      "achieved_create_rate_per_s": 30.866666666666667,
+      "achieved_delete_rate_per_s": 30.833333333333332,
+      "max_in_flight": 98,
+      "valid": false
+    },
+    {
+      "trial_idx": 2,
+      "csv": "trial-02.csv",
+      "pod_ids_attempted": 1035,
+      "counts_all": {
+        "create_ok": 0,
+        "create_conflict": 0,
+        "create_err": 1035,
+        "delete_ok": 0,
+        "delete_missing": 1035,
+        "delete_err": 0
+      },
+      "recorded_in_window": {
+        "create": 880,
+        "delete": 904
+      },
+      "failure_rate": 0.5,
+      "achieved_create_rate_per_s": 29.333333333333332,
+      "achieved_delete_rate_per_s": 30.133333333333333,
+      "max_in_flight": 93,
+      "valid": false
+    }
+  ]
+}

@@ -16,6 +16,6 @@ Acceptance Criteria:
   2. Pod create → schedule → Running works end-to-end 
   3. kubectl delete pod is reflected immediately on re-read
   4. Restarting the API server reconnects and resumes (Watch re-established)
-  5. Restarting Redis — data survives (with persistence enabled)
+  5. Restarting Redis — data survives (with persistence enabled) | Completed using persistence namespace even after restarting the redis instance
   6. kube-scheduler and kube-controller-manager both elect a leader and stay healthy (lease requirement)
   7. Run your existing load test at 50 RPS for 1 minute without errors 

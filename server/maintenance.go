@@ -19,7 +19,7 @@ func (s *MaintenanceServer) Status(ctx context.Context, req *pb.StatusRequest) (
 	rev, _ := s.store.CurrentRevision(ctx)
 	return &pb.StatusResponse{
 		Header: &pb.ResponseHeader{ClusterId: 1, MemberId: 1, Revision: rev},
-		Version: "3.5.0",
+		Version: "3.5.24",
 		DbSize:  0,
 		Leader:  1,
 		RaftIndex: uint64(rev),

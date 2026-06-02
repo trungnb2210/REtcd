@@ -68,12 +68,43 @@ func TestRangePrefixReturnsOnlyMatchingKeys(t *testing.T) {
 	}
 }
 
+func TestRangePrefixReturnsKeysInLexicographicOrder(t *testing.T) {
+	kv := server.NewKVServer(newFakeStore())
+	ctx := context.Background()
+
+	kv.Put(ctx, &pb.PutRequest{Key: []byte("/p/2"), Value: []byte("2")})
+	kv.Put(ctx, &pb.PutRequest{Key: []byte("/p/10"), Value: []byte("10")})
+	kv.Put(ctx, &pb.PutRequest{Key: []byte("/p/1"), Value: []byte("1")})
+
+	resp, err := kv.Range(ctx, &pb.RangeRequest{
+		Key:      []byte("/p/"),
+		RangeEnd: []byte("/p0"),
+	})
+	if err != nil {
+		t.Fatalf("Range: %v", err)
+	}
+
+	got := make([]string, len(resp.Kvs))
+	for i, kv := range resp.Kvs {
+		got[i] = string(kv.Key)
+	}
+	want := []string{"/p/1", "/p/10", "/p/2"}
+	if len(got) != len(want) {
+		t.Fatalf("got %d keys %v, want %d keys %v", len(got), got, len(want), want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("key order = %v, want %v", got, want)
+		}
+	}
+}
+
 func TestRangeExcludesRangeEnd(t *testing.T) {
 	kv := server.NewKVServer(newFakeStore())
 	ctx := context.Background()
 
 	kv.Put(ctx, &pb.PutRequest{Key: []byte("/p/a"), Value: []byte("1")})
-	kv.Put(ctx, &pb.PutRequest{Key: []byte("/p0"),  Value: []byte("boundary")}) // == rangeEnd, must be excluded
+	kv.Put(ctx, &pb.PutRequest{Key: []byte("/p0"), Value: []byte("boundary")}) // == rangeEnd, must be excluded
 
 	resp, err := kv.Range(ctx, &pb.RangeRequest{
 		Key:      []byte("/p/"),

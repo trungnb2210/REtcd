@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{.Name}}
+  labels:
+    run: load-test
+spec:
+  # nodeSelector:
+  #     kubernetes.io/hostname: kind-worker
+  nodeSelector:
+    type: kwok
+  tolerations:
+  - key: "kwok.x-k8s.io/node"
+    operator: "Exists"
+    effect: "NoSchedule"
+  containers:
+  - name: fake-container
+    image: registry.k8s.io/pause:3.9

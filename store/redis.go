@@ -2,46 +2,40 @@ package store
 
 import (
 	"context"
-	"encoding/json"
+	_ "embed"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/redis/go-redis/v9"
 )
+
+//go:embed txn.lua
+var txnLua string
 
 // ErrTxnFailed is returned when a Txn compare condition is not satisfied.
 var ErrTxnFailed = errors.New("txn compare failed")
 
 // Event represents a single change record read from the Redis Stream.
 type Event struct {
-	Type  string    // "PUT" or "DELETE"
-	Key   string
-	Rev   int64
-	KV    *KeyValue // nil for DELETE events
-	PrevKV *KeyValue // previous value before this PUT; nil for creates
-}
-
-// StreamStartID returns the Redis Stream ID to start reading from for a given
-// etcd revision. We use "0" (beginning of stream) when startRevision <= 1,
-// otherwise we use the revision as a stream entry sequence hint.
-// Since we don't store a direct revision→streamID mapping, we read from the
-// beginning and skip entries with rev < startRevision.
-func StreamStartID(startRevision int64) string {
-	if startRevision <= 1 {
-		return "0"
-	}
-	return "0" // always read from start and filter — simple and correct
+	Type      string // "PUT" or "DELETE"
+	Key       string
+	Rev       int64
+	KV        *KeyValue // nil for DELETE events
+	PrevKV    *KeyValue // previous value before this PUT; nil for creates
+	CreatedMs int64     // unix-ms when the entry was appended (from the Redis stream ID)
+	ID        string    // the Redis Stream entry ID ("<ms>-<seq>"); used to seek catch-up
 }
 
 // ReadEvents reads up to maxCount events from the Redis Stream after lastID,
-// blocking up to blockMs milliseconds if no events are available.
-// Returns the events and the last stream ID read (to use as the next lastID).
+// non-blocking. Returns the events and the last stream ID read.
 func (r *RedisStore) ReadEvents(ctx context.Context, lastID string, blockMs int, maxCount int64) ([]Event, string, error) {
 	results, err := r.client.XRead(ctx, &redis.XReadArgs{
 		Streams: []string{eventStream, lastID},
 		Count:   maxCount,
-		Block:   0, // non-blocking — we handle blocking in the caller loop
+		Block:   0,
 	}).Result()
 
 	if err == redis.Nil {
@@ -59,7 +53,7 @@ func (r *RedisStore) ReadEvents(ctx context.Context, lastID string, blockMs int,
 			newLastID = msg.ID
 			ev, err := parseStreamEvent(msg)
 			if err != nil {
-				continue // skip malformed events
+				continue
 			}
 			events = append(events, ev)
 		}
@@ -74,11 +68,11 @@ func (r *RedisStore) BlockReadEvents(ctx context.Context, lastID string, maxCoun
 	results, err := r.client.XRead(ctx, &redis.XReadArgs{
 		Streams: []string{eventStream, lastID},
 		Count:   maxCount,
-		Block:   500, // block up to 500ms then return empty so we can check ctx
+		Block:   500,
 	}).Result()
 
 	if err == redis.Nil {
-		return nil, lastID, nil // timeout, no new events
+		return nil, lastID, nil
 	}
 	if err != nil {
 		if ctx.Err() != nil {
@@ -104,35 +98,56 @@ func (r *RedisStore) BlockReadEvents(ctx context.Context, lastID string, maxCoun
 	return events, newLastID, nil
 }
 
+// streamString extracts a stream field as a string. go-redis returns XADD
+// values as strings, so a type assertion avoids the reflection cost of
+// fmt.Sprintf("%v", ...) on the watch hot path (every field of every event).
+func streamString(v interface{}) string {
+	if s, ok := v.(string); ok {
+		return s
+	}
+	if v == nil {
+		return ""
+	}
+	return fmt.Sprintf("%v", v)
+}
+
 // parseStreamEvent converts a Redis Stream message to an Event.
 func parseStreamEvent(msg redis.XMessage) (Event, error) {
 	ev := Event{
-		Type: fmt.Sprintf("%v", msg.Values["type"]),
-		Key:  fmt.Sprintf("%v", msg.Values["key"]),
+		Type: streamString(msg.Values["type"]),
+		Key:  streamString(msg.Values["key"]),
+		ID:   msg.ID,
 	}
 
-	revStr := fmt.Sprintf("%v", msg.Values["rev"])
-	rev, err := strconv.ParseInt(revStr, 10, 64)
+	// Redis stream IDs are "<unix-ms>-<seq>"; the millisecond prefix is the
+	// append time, used to measure watch-delivery latency.
+	if dash := strings.IndexByte(msg.ID, '-'); dash > 0 {
+		if ms, err := strconv.ParseInt(msg.ID[:dash], 10, 64); err == nil {
+			ev.CreatedMs = ms
+		}
+	}
+
+	rev, err := strconv.ParseInt(streamString(msg.Values["rev"]), 10, 64)
 	if err != nil {
 		return ev, fmt.Errorf("parse rev: %w", err)
 	}
 	ev.Rev = rev
 
 	if ev.Type == "PUT" {
-		dataStr := fmt.Sprintf("%v", msg.Values["data"])
-		var kv KeyValue
-		if err := json.Unmarshal([]byte(dataStr), &kv); err != nil {
-			return ev, fmt.Errorf("unmarshal kv: %w", err)
+		if dataRaw, ok := msg.Values["data"]; ok {
+			if kv := decodeKV(ev.Key, []byte(streamString(dataRaw))); kv != nil {
+				ev.KV = kv
+			}
 		}
-		ev.KV = &kv
+	}
 
-		if prevRaw, ok := msg.Values["prev_data"]; ok {
-			prevStr := fmt.Sprintf("%v", prevRaw)
-			if prevStr != "" && prevStr != "<nil>" {
-				var prevKV KeyValue
-				if err := json.Unmarshal([]byte(prevStr), &prevKV); err == nil {
-					ev.PrevKV = &prevKV
-				}
+	// prev_data carries the pre-image for both PUT (the overwritten value) and
+	// DELETE (the deleted object). The apiserver needs it on DELETE to avoid a
+	// PrevKv=nil watch error that tears down its watch-cache.
+	if prevRaw, ok := msg.Values["prev_data"]; ok {
+		if prevStr := streamString(prevRaw); prevStr != "" {
+			if prevKV := decodeKV(ev.Key, []byte(prevStr)); prevKV != nil {
+				ev.PrevKV = prevKV
 			}
 		}
 	}
@@ -143,16 +158,50 @@ func parseStreamEvent(msg redis.XMessage) (Event, error) {
 const (
 	revisionKey = "global:revision"
 	eventStream = "events"
+	keyIndex    = "keyindex"
 )
 
 // KeyValue is what we store in Redis for each etcd key.
 type KeyValue struct {
-	Key            string `json:"key"`
-	Value          []byte `json:"value"`
-	CreateRevision int64  `json:"create_revision"`
-	ModRevision    int64  `json:"mod_revision"`
-	Version        int64  `json:"version"` // increments on each modification
-	Lease          int64  `json:"lease"`
+	Key            string
+	Value          []byte
+	CreateRevision int64
+	ModRevision    int64
+	Version        int64
+	Lease          int64
+}
+
+// encodeKV serialises a KeyValue to a compact binary blob:
+//
+//	bytes  1- 8  create_revision (big-endian int64)
+//	bytes  9-16  mod_revision
+//	bytes 17-24  version
+//	bytes 25-32  lease
+//	bytes 33+    raw value
+func encodeKV(createRev, modRev, version, lease int64, value []byte) []byte {
+	buf := make([]byte, 32+len(value))
+	binary.BigEndian.PutUint64(buf[0:], uint64(createRev))
+	binary.BigEndian.PutUint64(buf[8:], uint64(modRev))
+	binary.BigEndian.PutUint64(buf[16:], uint64(version))
+	binary.BigEndian.PutUint64(buf[24:], uint64(lease))
+	copy(buf[32:], value)
+	return buf
+}
+
+// decodeKV deserialises a binary blob written by encodeKV (or txn.lua).
+// Returns nil if data is too short to be valid.
+func decodeKV(key string, data []byte) *KeyValue {
+	if len(data) < 32 {
+		return nil
+	}
+	return &KeyValue{
+		Key:            key,
+		CreateRevision: int64(binary.BigEndian.Uint64(data[0:8])),
+		ModRevision:    int64(binary.BigEndian.Uint64(data[8:16])),
+		Version:        int64(binary.BigEndian.Uint64(data[16:24])),
+		Lease:          int64(binary.BigEndian.Uint64(data[24:32])),
+		Value:          append([]byte(nil), data[32:]...),
+	}
 }
 
 type RedisStore struct {
@@ -165,18 +214,35 @@ func NewRedisStore(addr string) *RedisStore {
 
 // NewRedisStoreDB connects to a specific Redis database number.
 // DB 0 is the default; use a non-zero DB (e.g. 15) in tests for isolation.
+//
+// addr supports two forms:
+//   - "host:port"          → TCP (default)
+//   - "unix:///path/sock"  → Unix domain socket
+//
+// Unix sockets avoid the kernel TCP stack and shave ~50 µs off every Redis
+// round-trip, which compounds across the ~7-8 sequential apiserver writes
+// during a Knative scale-from-zero.
 func NewRedisStoreDB(addr string, db int) *RedisStore {
-	client := redis.NewClient(&redis.Options{
-		Addr: addr,
-		DB:   db,
-	})
-	// Ensure revision starts at 1 — etcd never returns revision 0.
-	client.SetNX(context.Background(), revisionKey, 1, 0)
-	return &RedisStore{client: client}
+	opts := &redis.Options{Addr: addr, DB: db}
+	if strings.HasPrefix(addr, "unix://") {
+		opts.Network = "unix"
+		opts.Addr = strings.TrimPrefix(addr, "unix://")
+	}
+	client := redis.NewClient(opts)
+	// Initialise the revision counter to 0 so the first INCR returns 1.
+	client.SetArgs(context.Background(), revisionKey, 0, redis.SetArgs{Mode: "NX"})
+	r := &RedisStore{client: client}
+	r.migrateKeyIndex(context.Background())
+	return r
 }
 
 func (r *RedisStore) Ping(ctx context.Context) error {
 	return r.client.Ping(ctx).Err()
+}
+
+// PoolStats exposes the go-redis connection-pool counters for metrics.
+func (r *RedisStore) PoolStats() *redis.PoolStats {
+	return r.client.PoolStats()
 }
 
 // incrRevision atomically increments the global revision and returns the new value.
@@ -189,15 +255,23 @@ func (r *RedisStore) incrRevision(ctx context.Context) (int64, error) {
 }
 
 // CurrentRevision returns the current global revision without incrementing.
+// Always returns ≥ 1 — etcd never exposes revision 0.
 func (r *RedisStore) CurrentRevision(ctx context.Context) (int64, error) {
 	val, err := r.client.Get(ctx, revisionKey).Result()
 	if err == redis.Nil {
-		return 1, nil // etcd revision starts at 1, never 0
+		return 1, nil
 	}
 	if err != nil {
 		return 0, err
 	}
-	return strconv.ParseInt(val, 10, 64)
+	rev, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+	if rev < 1 {
+		return 1, nil
+	}
+	return rev, nil
 }
 
 // redisKey returns the Redis key used to store an etcd key's data.
@@ -205,9 +279,56 @@ func redisKey(key string) string {
 	return "kv:" + key
 }
 
+// migrateKeyIndex upgrades older REtcd databases where keyindex was a Redis
+// Set. Newer code stores it as a ZSET so range scans can use ZRANGEBYLEX.
+func (r *RedisStore) migrateKeyIndex(ctx context.Context) {
+	typ, err := r.client.Type(ctx, keyIndex).Result()
+	if err != nil || typ != "set" {
+		return
+	}
+
+	members, err := r.client.SMembers(ctx, keyIndex).Result()
+	if err != nil {
+		return
+	}
+
+	pipe := r.client.Pipeline()
+	pipe.Del(ctx, keyIndex)
+	if len(members) > 0 {
+		zs := make([]redis.Z, len(members))
+		for i, member := range members {
+			zs[i] = redis.Z{Score: 0, Member: member}
+		}
+		pipe.ZAdd(ctx, keyIndex, zs...)
+	}
+	_, _ = pipe.Exec(ctx)
+}
+
+func prefixLexRange(prefix string) (min, max string) {
+	if prefix == "" {
+		return "-", "+"
+	}
+
+	next, ok := lexSuccessor(prefix)
+	if !ok {
+		return "[" + prefix, "+"
+	}
+	return "[" + prefix, "(" + next
+}
+
+func lexSuccessor(s string) (string, bool) {
+	b := []byte(s)
+	for i := len(b) - 1; i >= 0; i-- {
+		if b[i] != 0xff {
+			b[i]++
+			return string(b[:i+1]), true
+		}
+	}
+	return "", false
+}
+
 // Put stores a key-value pair, increments the revision, and appends to the event stream.
 func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID int64) (int64, *KeyValue, error) {
-	// Fetch existing value (for create_revision and version tracking)
 	existing, err := r.get(ctx, key)
 	if err != nil {
 		return 0, nil, err
@@ -225,24 +346,8 @@ func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID 
 		version = existing.Version + 1
 	}
 
-	kv := &KeyValue{
-		Key:            key,
-		Value:          value,
-		CreateRevision: createRevision,
-		ModRevision:    rev,
-		Version:        version,
-		Lease:          leaseID,
-	}
+	data := encodeKV(createRevision, rev, version, leaseID, value)
 
-	data, err := json.Marshal(kv)
-	if err != nil {
-		return 0, nil, fmt.Errorf("marshal kv: %w", err)
-	}
-
-	// Store the key-value and append event in a pipeline for efficiency.
-	pipe := r.client.Pipeline()
-	pipe.Set(ctx, redisKey(key), data, 0)
-	pipe.SAdd(ctx, "keyindex", key) // track all keys for range queries
 	streamValues := map[string]interface{}{
 		"type": "PUT",
 		"key":  key,
@@ -250,15 +355,18 @@ func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID 
 		"data": string(data),
 	}
 	if existing != nil {
-		prevData, _ := json.Marshal(existing)
+		prevData := encodeKV(existing.CreateRevision, existing.ModRevision, existing.Version, existing.Lease, existing.Value)
 		streamValues["prev_data"] = string(prevData)
 	}
+
+	pipe := r.client.Pipeline()
+	pipe.Set(ctx, redisKey(key), data, 0)
+	pipe.ZAdd(ctx, keyIndex, redis.Z{Score: 0, Member: key})
 	pipe.XAdd(ctx, &redis.XAddArgs{
 		Stream: eventStream,
-		ID:     "*", // auto-generate stream ID
+		ID:     "*",
 		Values: streamValues,
 	})
-	// Update lease key-sets: detach from old lease, attach to new one.
 	if existing != nil && existing.Lease != 0 && existing.Lease != leaseID {
 		pipe.SRem(ctx, leaseKeysSetKey(existing.Lease), key)
 	}
@@ -285,34 +393,61 @@ func (r *RedisStore) get(ctx context.Context, key string) (*KeyValue, error) {
 	if err != nil {
 		return nil, fmt.Errorf("get %s: %w", key, err)
 	}
-	var kv KeyValue
-	if err := json.Unmarshal(data, &kv); err != nil {
-		return nil, fmt.Errorf("unmarshal kv: %w", err)
-	}
-	return &kv, nil
+	return decodeKV(key, data), nil
 }
 
-// Range returns all keys with the given prefix, sorted lexicographically.
-func (r *RedisStore) Range(ctx context.Context, prefix string) ([]*KeyValue, error) {
-	// Get all tracked keys from the key index
-	keys, err := r.client.SMembers(ctx, "keyindex").Result()
+// Range returns all keys with the given prefix and the current global revision.
+// keyindex is a ZSET with score 0 for all keys, so ZRANGEBYLEX gives ordered
+// prefix scans without reading the whole keyspace.
+func (r *RedisStore) Range(ctx context.Context, prefix string) (int64, []*KeyValue, error) {
+	min, max := prefixLexRange(prefix)
+
+	pipe := r.client.Pipeline()
+	rangeCmd := pipe.ZRangeByLex(ctx, keyIndex, &redis.ZRangeBy{
+		Min: min,
+		Max: max,
+	})
+	revCmd := pipe.Get(ctx, revisionKey)
+	pipe.Exec(ctx) //nolint:errcheck
+
+	rev := int64(1)
+	if revStr, err := revCmd.Result(); err == nil {
+		if v, err := strconv.ParseInt(revStr, 10, 64); err == nil && v >= 1 {
+			rev = v
+		}
+	}
+	matched, err := rangeCmd.Result()
 	if err != nil {
-		return nil, fmt.Errorf("smembers keyindex: %w", err)
+		return rev, nil, fmt.Errorf("zrangebylex keyindex: %w", err)
+	}
+	if len(matched) == 0 {
+		return rev, nil, nil
+	}
+
+	redisKeys := make([]string, len(matched))
+	for i, k := range matched {
+		redisKeys[i] = redisKey(k)
+	}
+	vals, err := r.client.MGet(ctx, redisKeys...).Result()
+	if err != nil {
+		return rev, nil, fmt.Errorf("mget: %w", err)
 	}
 
 	var results []*KeyValue
-	for _, k := range keys {
-		if len(prefix) == 0 || k == prefix || (len(k) >= len(prefix) && k[:len(prefix)] == prefix) {
-			kv, err := r.get(ctx, k)
-			if err != nil {
-				return nil, err
-			}
-			if kv != nil {
-				results = append(results, kv)
-			}
+	for i, v := range vals {
+		if v == nil {
+			continue
+		}
+		str, ok := v.(string)
+		if !ok {
+			continue
+		}
+		kv := decodeKV(matched[i], []byte(str))
+		if kv != nil {
+			results = append(results, kv)
 		}
 	}
-	return results, nil
+	return rev, results, nil
 }
 
 // Delete removes a key and appends a delete event to the stream.
@@ -333,14 +468,19 @@ func (r *RedisStore) Delete(ctx context.Context, key string) (int64, *KeyValue, 
 
 	pipe := r.client.Pipeline()
 	pipe.Del(ctx, redisKey(key))
-	pipe.SRem(ctx, "keyindex", key)
+	pipe.ZRem(ctx, keyIndex, key)
+	// Carry the deleted object as prev_data: the apiserver opens storage watches
+	// WithPrevKV and rejects a DELETE event whose PrevKv is nil ("watch chan
+	// error ... PrevKv=nil"), which tears down its whole watch-cache for the
+	// resource and forces every client to relist. existing is non-nil here.
 	pipe.XAdd(ctx, &redis.XAddArgs{
 		Stream: eventStream,
 		ID:     "*",
 		Values: map[string]interface{}{
-			"type": "DELETE",
-			"key":  key,
-			"rev":  rev,
+			"type":      "DELETE",
+			"key":       key,
+			"rev":       rev,
+			"prev_data": string(encodeKV(existing.CreateRevision, existing.ModRevision, existing.Version, existing.Lease, existing.Value)),
 		},
 	})
 	if existing.Lease != 0 {
@@ -353,88 +493,8 @@ func (r *RedisStore) Delete(ctx context.Context, key string) (int64, *KeyValue, 
 	return rev, existing, nil
 }
 
-// txnScript is a Lua script that atomically:
-//  1. Fetches the current value of a key
-//  2. Checks whether its mod_revision matches the expected value
-//  3. If yes: writes the new value, increments the global revision, appends a PUT event
-//  4. Returns 1 (success) or 0 (failure) plus the current raw JSON value
-//
-// KEYS[1] = redisKey(key)   e.g. "kv:/registry/pods/default/mypod"
-// KEYS[2] = revisionKey     "global:revision"
-// KEYS[3] = eventStream     "events"
-// KEYS[4] = "keyindex"
-// ARGV[1] = expected mod_revision (or -1 to mean "key must not exist")
-// ARGV[2] = new JSON-serialised KeyValue to write (empty string = delete)
-// ARGV[3] = "PUT" or "DELETE"
-var txnScript = redis.NewScript(`
-local current_raw = redis.call('GET', KEYS[1])
-
--- Decode current mod_revision (0 if key does not exist)
-local current_mod_rev = 0
-local current_create_rev = 0
-local current_version = 0
-if current_raw then
-	local ok, decoded = pcall(cjson.decode, current_raw)
-	if ok then
-		current_mod_rev    = tonumber(decoded['mod_revision'])   or 0
-		current_create_rev = tonumber(decoded['create_revision']) or 0
-		current_version    = tonumber(decoded['version'])         or 0
-	end
-end
-
-local expected = tonumber(ARGV[1])
-
--- Compare: -1 means "key must not exist" (create-only), otherwise match mod_revision
-if expected == -1 then
-	if current_raw then
-		return {0, current_raw or ''}
-	end
-elseif current_mod_rev ~= expected then
-	return {0, current_raw or ''}
-end
-
--- Compare passed — perform the write
-local new_rev = redis.call('INCR', KEYS[2])
-local op = ARGV[3]
-
-if op == 'DELETE' then
-	redis.call('DEL', KEYS[1])
-	redis.call('SREM', KEYS[4], string.sub(KEYS[1], 4))
-	redis.call('XADD', KEYS[3], '*',
-		'type', 'DELETE',
-		'key',  string.sub(KEYS[1], 4),
-		'rev',  tostring(new_rev))
-else
-	local new_kv = cjson.decode(ARGV[2])
-	if current_raw then
-		new_kv['create_revision'] = current_create_rev
-		new_kv['version']         = current_version + 1
-	else
-		new_kv['create_revision'] = new_rev
-		new_kv['version']         = 1
-	end
-	new_kv['mod_revision'] = new_rev
-	local new_raw = cjson.encode(new_kv)
-	redis.call('SET',  KEYS[1], new_raw)
-	redis.call('SADD', KEYS[4], string.sub(KEYS[1], 4))
-	if current_raw then
-		redis.call('XADD', KEYS[3], '*',
-			'type',      'PUT',
-			'key',       string.sub(KEYS[1], 4),
-			'rev',       tostring(new_rev),
-			'data',      new_raw,
-			'prev_data', current_raw)
-	else
-		redis.call('XADD', KEYS[3], '*',
-			'type', 'PUT',
-			'key',  string.sub(KEYS[1], 4),
-			'rev',  tostring(new_rev),
-			'data', new_raw)
-	end
-end
-
-return {1, ''}
-`)
+// txnScript is loaded from txn.lua at compile time via go:embed.
+var txnScript = redis.NewScript(txnLua)
 
 // TxnResult is returned by Txn.
 type TxnResult struct {
@@ -451,22 +511,12 @@ func (r *RedisStore) Txn(
 	ctx context.Context,
 	key string,
 	expectedModRevision int64,
-	successOp string, // "PUT" or "DELETE"
+	successOp string,
 	newValue []byte,
 	leaseID int64,
 ) (*TxnResult, error) {
-	skeleton := &KeyValue{
-		Key:   key,
-		Value: newValue,
-		Lease: leaseID,
-	}
-	skeletonJSON, err := json.Marshal(skeleton)
-	if err != nil {
-		return nil, fmt.Errorf("marshal skeleton: %w", err)
-	}
-
-	keys := []string{redisKey(key), revisionKey, eventStream, "keyindex"}
-	args := []interface{}{expectedModRevision, string(skeletonJSON), successOp}
+	keys := []string{redisKey(key), revisionKey, eventStream, keyIndex}
+	args := []interface{}{expectedModRevision, string(newValue), successOp, leaseID}
 
 	res, err := txnScript.Run(ctx, r.client, keys, args...).Slice()
 	if err != nil {
@@ -476,13 +526,24 @@ func (r *RedisStore) Txn(
 	succeeded := res[0].(int64) == 1
 	result := &TxnResult{Succeeded: succeeded}
 
-	if !succeeded && res[1] != "" {
-		var kv KeyValue
-		if err := json.Unmarshal([]byte(res[1].(string)), &kv); err == nil {
-			result.Current = &kv
+	if !succeeded {
+		if binaryStr, ok := res[1].(string); ok {
+			if kv := decodeKV(key, []byte(binaryStr)); kv != nil {
+				result.Current = kv
+			}
 		}
 	}
 
-	result.Revision, _ = r.CurrentRevision(ctx)
+	if len(res) >= 3 {
+		if revStr, ok := res[2].(string); ok {
+			if v, err2 := strconv.ParseInt(revStr, 10, 64); err2 == nil {
+				result.Revision = v
+			}
+		}
+	}
+	if result.Revision == 0 {
+		result.Revision, _ = r.CurrentRevision(ctx)
+	}
+
 	return result, nil
 }

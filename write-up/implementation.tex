@@ -1,0 +1,233 @@
+% Implementation chapter for REtcd thesis.
+%
+% Requires the same preamble packages and the Go listings definition as
+% design.tex (booktabs, listings, xcolor, hyperref, textcomp). See the header
+% comment in design.tex for the recommended \lstdefinelanguage{Go} / \lstset.
+%
+% Chapter ordering: \input this file AFTER design.tex and BEFORE evaluation.tex,
+% so it numbers as the chapter between Design and Evaluation. Cross-references
+% use \ref, so the evaluation chapter's internal numbers update automatically.
+
+\chapter{Implementation}
+\label{ch:implementation}
+
+This chapter describes the concrete realisation of the design presented in Chapter~\ref{ch:design}. Where the design chapter argued \emph{what} REtcd does and \emph{why}, this chapter documents \emph{how} the code is structured, the engineering choices made at the level of data encoding, concurrency, and atomicity, and the testing and deployment machinery that supports the evaluation in Chapter~\ref{ch:evaluation}. REtcd is approximately 1{,}600 lines of Go and a 107-line Lua script; the emphasis throughout is on parsimony, in keeping with the implementation-parsimony priority of Section~\ref{sec:design-goals}.
+
+\section{Code organisation and dependencies}
+\label{sec:impl-org}
+
+The module is \texttt{github.com/trungnb2210/REtcd}, built with Go 1.25. It comprises two packages wired together by a composition root in \texttt{main.go}: \texttt{server/}, which implements the etcd v3 gRPC services, and \texttt{store/}, which implements the Redis backend behind the \texttt{Store} interface (Listing~\ref{lst:store-iface}). Table~\ref{tab:impl-loc} gives the line counts.
+
+\begin{table}[h]
+    \centering
+    \caption{Non-test source size by file (lines of Go, plus the embedded Lua script).}
+    \label{tab:impl-loc}
+    \begin{tabular}{@{}llr@{}}
+        \toprule
+        \textbf{Package} & \textbf{File} & \textbf{LoC} \\
+        \midrule
+        (root)  & \texttt{main.go}            &  96 \\
+        \midrule
+        server  & \texttt{types.go}           &  68 \\
+        server  & \texttt{kv\_put.go}         &  37 \\
+        server  & \texttt{kv\_range.go}       &  65 \\
+        server  & \texttt{kv\_delete.go}      &  54 \\
+        server  & \texttt{kv\_txn.go}         & 251 \\
+        server  & \texttt{watch.go}           & 275 \\
+        server  & \texttt{lease.go}           &  85 \\
+        server  & \texttt{maintenance.go}     &  28 \\
+        server  & \texttt{compact.go}         &  15 \\
+        \midrule
+        store   & \texttt{redis.go}           & 510 \\
+        store   & \texttt{lease.go}           & 134 \\
+        store   & \texttt{txn.lua}            & 107 \\
+        \midrule
+        \multicolumn{2}{@{}l}{\textbf{Total (Go, excl.\ tests)}} & \textbf{1{,}618} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The dependency set is deliberately small (Table~\ref{tab:impl-deps}). The most important point is what is \emph{absent}: REtcd depends on \texttt{go.etcd.io/etcd/api/v3} for the protobuf-generated wire types and service stubs only---it does not link any part of the etcd \emph{server} (no Raft library, no bbolt, no MVCC engine). Every service is reimplemented against the \texttt{Store} interface. This is what makes the line count possible and is the concrete expression of the ``reimplement the fa\c{c}ade, delegate the substrate'' decision of Chapter~\ref{ch:design}.
+
+\begin{table}[h]
+    \centering
+    \caption{Direct dependencies.}
+    \label{tab:impl-deps}
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Module} & \textbf{Version} & \textbf{Role} \\
+        \midrule
+        \texttt{go.etcd.io/etcd/api/v3} & v3.6.10 & etcd v3 protobuf wire types + service stubs (API only) \\
+        \texttt{google.golang.org/grpc} & v1.80.0 & gRPC server runtime \\
+        \texttt{github.com/redis/go-redis/v9} & v9.18.0 & Redis client \\
+        \texttt{github.com/soheilhy/cmux} & v0.1.5 & Single-port HTTP/gRPC multiplexing \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{The storage layer}
+\label{sec:impl-store}
+
+The \texttt{store} package translates the etcd data model onto the four Redis structures of Table~\ref{tab:redis-layout}. \texttt{*store.RedisStore} is the sole production implementation of \texttt{Store}.
+
+\subsection{Record encoding}
+\label{sec:impl-encoding}
+
+Each etcd key's value and metadata are serialised into a single binary blob by \texttt{encodeKV} and recovered by \texttt{decodeKV}: a 32-byte fixed header of four big-endian \texttt{int64}s (\texttt{create\_revision}, \texttt{mod\_revision}, \texttt{version}, \texttt{lease}) followed by the raw value bytes (the layout of Listing~\ref{lst:kv-encoding}). A hand-rolled binary format is chosen over JSON or protobuf for two reasons. First, it is self-describing to the Lua transaction script (Section~\ref{sec:impl-txn}): the script recovers \texttt{mod\_revision} with a fixed-offset byte read, where a JSON encoding would require a Lua JSON parser that Redis does not ship. Second, it keeps the \texttt{store} package free of any protobuf dependency, preserving the testability of the interface seam.
+
+One detail of \texttt{decodeKV} is load-bearing for correctness: the value field is copied out of the source buffer (\texttt{append([]byte(nil), data[32:]...)}) rather than aliased. The go-redis client may reuse the underlying buffer of a returned byte slice; without the copy, a decoded \texttt{KeyValue.Value} could be mutated by a later read on the same connection.
+
+\subsection{The key index as a sorted set}
+\label{sec:impl-keyindex}
+
+Redis offers no efficient ordered scan over an arbitrary key subset, so REtcd maintains an explicit index, \texttt{keyindex}. It is implemented as a Redis \textbf{sorted set} (ZSET) in which every live etcd key is a member with score~0. With a uniform score, \texttt{ZRANGEBYLEX} performs a lexicographic range scan, which is exactly the access pattern an etcd prefix scan requires. A prefix is converted to a ZSET lexicographic range by \texttt{prefixLexRange} (Listing~\ref{lst:lexrange}): the inclusive lower bound is \texttt{[}\,prefix, and the exclusive upper bound is \texttt{(}\,$s$, where $s$ is the lexicographic successor of the prefix (the prefix with its last non-\texttt{0xff} byte incremented). The empty prefix maps to the full-range tokens \texttt{-} and \texttt{+}.
+
+\begin{lstlisting}[language=Go,caption={Deriving a \texttt{ZRANGEBYLEX} window from an etcd prefix (\texttt{store/redis.go}).},label=lst:lexrange]
+func prefixLexRange(prefix string) (min, max string) {
+    if prefix == "" {
+        return "-", "+"
+    }
+    next, ok := lexSuccessor(prefix)
+    if !ok {
+        return "[" + prefix, "+"
+    }
+    return "[" + prefix, "(" + next
+}
+
+func lexSuccessor(s string) (string, bool) {
+    b := []byte(s)
+    for i := len(b) - 1; i >= 0; i-- {
+        if b[i] != 0xff {
+            b[i]++
+            return string(b[:i+1]), true
+        }
+    }
+    return "", false
+}
+\end{lstlisting}
+
+This is a refinement over a naive set-membership index: an earlier version stored \texttt{keyindex} as an unordered Redis Set and enumerated it with \texttt{SMEMBERS} on every range, which is $O(N)$ in the total number of live keys regardless of how many match. The ZSET form makes a prefix scan $O(\log N + M)$ for $M$ matches. To migrate existing deployments without a flag day, \texttt{NewRedisStoreDB} calls \texttt{migrateKeyIndex} at startup: if it finds \texttt{keyindex} stored as a Set, it reads the members and rewrites them as a ZSET in a single pipelined \texttt{DEL}+\texttt{ZADD}. The migration is idempotent and a no-op once the index is already a ZSET.
+
+\subsection{The write path}
+\label{sec:impl-write}
+
+An unconditional \texttt{Put} (Listing~\ref{lst:put-pipeline}) reads any existing record (to preserve \texttt{create\_revision} and to increment \texttt{version}), allocates a revision with \texttt{INCR global:revision}, encodes the new blob, and applies four effects in a single pipeline: write the value, add the key to the ZSET index, append a \texttt{PUT} event to the stream, and reconcile lease membership. The latter four are pipelined to amortise the round-trip; the \texttt{INCR} precedes the pipeline because the encoded blob must carry the allocated revision.
+
+\begin{lstlisting}[language=Go,caption={The \texttt{Put} effect pipeline (\texttt{store/redis.go}).},label=lst:put-pipeline]
+pipe := r.client.Pipeline()
+pipe.Set(ctx, redisKey(key), data, 0)
+pipe.ZAdd(ctx, keyIndex, redis.Z{Score: 0, Member: key})
+pipe.XAdd(ctx, &redis.XAddArgs{Stream: eventStream, ID: "*", Values: streamValues})
+if existing != nil && existing.Lease != 0 && existing.Lease != leaseID {
+    pipe.SRem(ctx, leaseKeysSetKey(existing.Lease), key)  // detach old lease
+}
+if leaseID != 0 {
+    pipe.SAdd(ctx, leaseKeysSetKey(leaseID), key)         // attach new lease
+}
+_, err := pipe.Exec(ctx)
+\end{lstlisting}
+
+This path is not perfectly atomic: the \texttt{INCR} and the pipeline are two separate Redis commands, so a crash between them would advance the revision counter without writing a matching key. For a single-node deployment this is an accepted limitation (noted in the source and revisited in future work); concurrent \texttt{Put}s remain correct, since each obtains a distinct revision from the atomic \texttt{INCR}. \texttt{Delete} follows the mirror-image pipeline (\texttt{DEL}, \texttt{ZREM}, a \texttt{DELETE} event, lease detach), short-circuiting to a no-op that returns the current revision when the key is absent.
+
+\subsection{Atomic compare-and-swap}
+\label{sec:impl-txn}
+
+Where \texttt{Put} can tolerate non-atomicity, \texttt{Txn} cannot: a compare-and-swap must read \texttt{mod\_revision}, compare it, and conditionally write as one indivisible step. This is implemented as a server-side Lua script, \texttt{store/txn.lua}, embedded into the binary at compile time with \texttt{go:embed} and executed via go-redis's cached-script (\texttt{EVALSHA}) wrapper. Because Redis runs Lua single-threaded, the read-compare-write executes atomically with respect to all other clients.
+
+The Go side (\texttt{RedisStore.Txn}) passes the four Redis keys it touches as \texttt{KEYS} and the compare/operation parameters as \texttt{ARGV}; an \texttt{expectedModRevision} of $-1$ encodes the create-only predicate (``key must not exist''). The script recovers the stored \texttt{mod\_revision} with a fixed-offset big-endian decode (\texttt{dec64}, the Lua mirror of \texttt{decodeKV}), compares, and on success performs the same effects the write path would---\texttt{INCR}, \texttt{SET}, \texttt{ZADD}, and a \texttt{PUT}/\texttt{DELETE} event---using \texttt{enc64} to build the new header. On failure it returns the current blob so the caller can report the conflicting state without a second round-trip. The binary encoding of Section~\ref{sec:impl-encoding} is what makes the Lua side tractable; the script and the Go encoder share the same 32-byte header contract.
+
+\subsection{The event stream and reads}
+\label{sec:impl-events}
+
+Reads come in two shapes. \texttt{Get} is a single \texttt{GET kv:<key>} decoded by \texttt{decodeKV}. \texttt{Range} pipelines a \texttt{ZRANGEBYLEX} over the index with a \texttt{GET} of the revision counter, then batch-fetches the matched values with a single \texttt{MGET}---two round-trips total, independent of the keyspace size.
+
+Watch consumption is served by \texttt{BlockReadEvents}, which issues \texttt{XREAD BLOCK 500} against the \texttt{events} stream from a caller-supplied last-seen ID. The 500\,ms block bounds the latency with which a cancelled watch notices context cancellation while still suspending server-side between events rather than busy-polling. \texttt{parseStreamEvent} reconstructs an \texttt{Event} from the stream fields, decoding the \texttt{data} and \texttt{prev\_data} blobs back into \texttt{KeyValue}s with the same \texttt{decodeKV}. Consistent with Section~\ref{sec:design-watch}, there is no revision-to-stream-ID index: \texttt{StreamStartID} always returns \texttt{"0"} and revision filtering happens in the server layer.
+
+\section{The gRPC service layer}
+\label{sec:impl-server}
+
+The \texttt{server} package implements four etcd v3 services over the \texttt{Store} interface. A single adapter, \texttt{toProtoKV} (Section~\ref{sec:design-arch}), converts the internal \texttt{store.KeyValue} to the wire type \texttt{mvccpb.KeyValue} at every response boundary; a \texttt{header} helper stamps the single-node \texttt{ClusterId}/\texttt{MemberId} and the current revision onto each \texttt{ResponseHeader}.
+
+\paragraph{KV.}
+\texttt{Put} and \texttt{DeleteRange} are thin translations onto \texttt{store.Put}/\texttt{store.Delete}. \texttt{Range} distinguishes a single-key \texttt{Get} (empty \texttt{rangeEnd}) from a prefix/range scan, computing the common prefix of \texttt{key} and \texttt{rangeEnd} to derive the \texttt{store.Range} argument and then filtering the result to the exact half-open \texttt{[key, rangeEnd)} window in Go. \texttt{DeleteRange} over a range issues one \texttt{store.Delete} per matched key; this is not atomic across keys, an accepted simplification since each emits its own event and Kubernetes does not depend on cross-key delete atomicity here.
+
+\paragraph{Txn.}
+The transaction handler pattern-matches the incoming request against the two shapes Kubernetes emits (Section~\ref{sec:design-txn}): \texttt{isCreate} (compare \texttt{mod\_revision}\,=\,0, one \texttt{Put} on success) and \texttt{isUpdate} (compare \texttt{mod\_revision}\,=\,$N$, \texttt{Put} on success, \texttt{Range} on failure). Both dispatch to the single-round-trip Lua CAS. Any other shape falls through to \texttt{genericTxn}, which evaluates each \texttt{Compare} against current key state (\texttt{evalCompare}) and executes the chosen branch's operations (\texttt{executeOp}); this fallback is not atomic across operations and exists only for the apiserver compactor's single-key version CAS.
+
+\paragraph{Watch.}
+\texttt{Watch} realises the protocol of Section~\ref{sec:design-watch}. The bidirectional stream handler demultiplexes create/cancel requests, assigning each watch a unique ID and spawning one goroutine (\texttt{tailWatch}) per watch. Three implementation details carry the protocol requirements: (i) a \texttt{sender} struct serialises all \texttt{Send} calls behind a mutex, because a single gRPC stream is shared by many watch goroutines and is not safe for concurrent writes; (ii) every \texttt{WatchResponse} stamps \texttt{Header.Revision} with the cluster's current revision, and an empty progress notification is emitted after one second of silence, the requirement that lets idle per-resource watch caches advance; (iii) \texttt{cancelOnParent} provides an idempotent, concurrently-callable cancellation that fires on either client disconnect or an explicit cancel request.
+
+\paragraph{Lease, Maintenance, Compaction.}
+The lease service maps the four lease RPCs onto Redis keys with native \texttt{EX} expiry, a per-lease Set of attached keys, and a once-per-second reaper goroutine that cascades deletes for expired leases (Section~\ref{sec:design-k8s-leases}). \texttt{Maintenance.Status} returns a plausible single-node status (version \texttt{3.5.24}, self as leader, revision echoed as the Raft index); its other methods and \texttt{Compact} are acknowledged stubs, sufficient because kube-apiserver calls \texttt{Status} and \texttt{Compact} but not the operator-facing remainder.
+
+\section{Process bootstrap}
+\label{sec:impl-main}
+
+\texttt{main.go} is the composition root. It reads \texttt{LISTEN\_ADDR} and \texttt{REDIS\_ADDR} from the environment (the latter accepting both \texttt{host:port} and \texttt{unix:///path} forms, Section~\ref{sec:impl-deploy}), constructs the \texttt{RedisStore}, starts the lease reaper, registers the four services on a gRPC server, and serves. Two bootstrap choices are correctness requirements rather than tuning, both established during Kubernetes integration (Section~\ref{sec:design-k8s}): the gRPC \texttt{KeepaliveEnforcementPolicy} is relaxed to admit the apiserver's frequent pings, and a \texttt{cmux} multiplexer fronts the listener so that the HTTP/1.1 \texttt{/version} and \texttt{/health} endpoints share port 2379 with the HTTP/2 gRPC traffic. The gRPC and HTTP servers each run on their own cmux-matched listener in a dedicated goroutine, with the main goroutine blocked on \texttt{cmux.Serve}.
+
+\section{Testing strategy}
+\label{sec:impl-testing}
+
+Testing is two-tiered, mirroring the interface seam (Table~\ref{tab:impl-tests}). Server-layer logic is tested against \texttt{fakeStore}, an in-memory map that implements the \texttt{Store} interface, so the gRPC handlers---revision stamping, prev-kv handling, range-window filtering, Txn pattern-matching---are exercised deterministically with no Redis dependency. Redis-specific behaviour that \texttt{fakeStore} cannot capture---Lua compare-and-swap atomicity, \texttt{ZRANGEBYLEX} ordering, stream delivery and revision ordering---is tested against a real Redis. The integration tests connect to Redis database~15 for isolation and skip automatically when Redis is unreachable, so \texttt{go test ./...} remains green in environments without a Redis (continuous integration), while the full suite runs locally against \texttt{redis:7}.
+
+\begin{table}[h]
+    \centering
+    \caption{Test inventory.}
+    \label{tab:impl-tests}
+    \begin{tabular}{@{}llll@{}}
+        \toprule
+        \textbf{Tier} & \textbf{Package} & \textbf{Double / backend} & \textbf{Tests} \\
+        \midrule
+        Unit        & \texttt{tests/server} (\texttt{server\_test}) & \texttt{fakeStore} (in-memory) & 20 \\
+        Integration & \texttt{tests/store} (\texttt{store\_test})   & real Redis, DB 15 (auto-skip) & 15 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Build and deployment}
+\label{sec:impl-deploy}
+
+\paragraph{Container image.}
+The binary is packaged by a multi-stage Dockerfile (Listing~\ref{lst:dockerfile}): a \texttt{golang:1.25-alpine} build stage cross-compiles a static, \texttt{CGO}-disabled binary (honouring \texttt{TARGETOS}/\texttt{TARGETARCH} for multi-architecture builds, with \texttt{-trimpath} and \texttt{-ldflags="-s -w"} to strip debug metadata), and a \texttt{distroless/static} runtime stage runs it as a non-root user. The result is a minimal image with no shell or package manager, appropriate for a control-plane component.
+
+\begin{lstlisting}[caption={Multi-stage, multi-arch container build (\texttt{Dockerfile}).},label=lst:dockerfile]
+FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS builder
+ARG TARGETOS TARGETARCH
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -trimpath -ldflags="-s -w" -o /out/retcd .
+
+FROM gcr.io/distroless/static-debian12:nonroot
+COPY --from=builder /out/retcd /retcd
+ENV LISTEN_ADDR=":2379" REDIS_ADDR="localhost:6379"
+EXPOSE 2379
+USER nonroot:nonroot
+ENTRYPOINT ["/retcd"]
+\end{lstlisting}
+
+\paragraph{Image evolution.}
+The image went through several generations during Kubernetes bring-up, each resolving a concrete integration failure (Table~\ref{tab:impl-images}). The progression is itself evidence for the design chapter's claim that the hard part of an etcd substitute is protocol fidelity, not storage: the storage layer was correct early, but the cluster did not function until the keepalive policy, the \texttt{/version} endpoint, and---decisively---the Watch progress-notification behaviour were in place.
+
+\begin{table}[h]
+    \centering
+    \caption{Container image generations during integration.}
+    \label{tab:impl-images}
+    \begin{tabular}{@{}lll@{}}
+        \toprule
+        \textbf{Tag} & \textbf{Change} & \textbf{Status} \\
+        \midrule
+        v0 & Scaffold; nil-deref in generic Txn, no \texttt{/version}, no keepalive policy & superseded \\
+        v1 & Added cmux + \texttt{/version} (reported 3.5.0) & version too low \\
+        v2 & \texttt{/version} bumped to 3.5.24 & Watch bug remained \\
+        v3 & Bisection build (cmux/keepalive removed to localise fault) & diagnostic \\
+        v4 & Watch progress notifications; first end-to-end working cluster & superseded \\
+        v5 & v4 + Unix-domain-socket Redis support & \textbf{canonical} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\paragraph{CloudLab deployment.}
+On the evaluation cluster, Redis and REtcd run as \texttt{systemd}-managed containers in a dedicated \texttt{containerd} namespace with host networking, configured as the kubeadm external-etcd endpoint. The canonical (v5) deployment connects REtcd to Redis over a Unix domain socket shared through a bind-mounted host directory, selected by \texttt{REDIS\_ADDR=unix:///run/retcd/redis.sock}; \texttt{NewRedisStoreDB} detects the \texttt{unix://} prefix and switches the client transport accordingly. The Unix socket avoids the kernel TCP stack, removing roughly 50\,\textmu{}s per Redis round-trip relative to TCP localhost---a saving that compounds across the sequential apiserver writes of a scale-from-zero, and whose end-to-end effect is the subject of the optimisation discussion in Chapter~\ref{ch:evaluation}.

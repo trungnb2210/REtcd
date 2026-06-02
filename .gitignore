@@ -26,6 +26,16 @@ go.work.sum
 
 # Binary
 retcd
+propbench
+retcd-linux
+*-linux
+load-test/propbench/propbench
+
+# Python virtualenv (load-test plotting)
+.venv/
+
+# Local Claude Code state
+.claude/
 
 # env file
 .env

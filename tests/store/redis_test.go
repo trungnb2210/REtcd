@@ -131,7 +131,7 @@ func TestRange(t *testing.T) {
 	s.Put(ctx, "/a/2", []byte("two"), 0)
 	s.Put(ctx, "/b/1", []byte("other"), 0)
 
-	kvs, err := s.Range(ctx, "/a/")
+	_, kvs, err := s.Range(ctx, "/a/")
 	if err != nil {
 		t.Fatalf("Range: %v", err)
 	}
@@ -142,6 +142,30 @@ func TestRange(t *testing.T) {
 		if kv.Key != "/a/1" && kv.Key != "/a/2" {
 			t.Errorf("unexpected key in range result: %q", kv.Key)
 		}
+	}
+}
+
+func TestRangeReturnsKeysInLexicographicOrder(t *testing.T) {
+	s := newTestStore(t)
+	ctx := context.Background()
+
+	s.Put(ctx, "/a/2", []byte("two"), 0)
+	s.Put(ctx, "/a/10", []byte("ten"), 0)
+	s.Put(ctx, "/a/1", []byte("one"), 0)
+	s.Put(ctx, "/a0", []byte("boundary"), 0)
+
+	_, kvs, err := s.Range(ctx, "/a/")
+	if err != nil {
+		t.Fatalf("Range: %v", err)
+	}
+
+	got := make([]string, len(kvs))
+	for i, kv := range kvs {
+		got[i] = kv.Key
+	}
+	want := []string{"/a/1", "/a/10", "/a/2"}
+	if fmt.Sprint(got) != fmt.Sprint(want) {
+		t.Fatalf("range order = %v, want %v", got, want)
 	}
 }
 
@@ -177,6 +201,39 @@ func TestDeleteMissing(t *testing.T) {
 	}
 	if prev != nil {
 		t.Errorf("expected nil prev for missing key, got %+v", prev)
+	}
+}
+
+// TestDeleteEventCarriesPrevKV guards the cold-start watch-churn fix: a DELETE
+// must emit a watch event whose PrevKV is the deleted object. Without it the
+// apiserver rejects the event (PrevKv=nil) and tears down its watch-cache.
+func TestDeleteEventCarriesPrevKV(t *testing.T) {
+	s := newTestStore(t)
+	ctx := context.Background()
+
+	s.Put(ctx, "/dk", []byte("hello"), 0)
+	if _, _, err := s.Delete(ctx, "/dk"); err != nil {
+		t.Fatalf("Delete: %v", err)
+	}
+
+	events, _, err := s.ReadEvents(ctx, "0", 0, 100)
+	if err != nil {
+		t.Fatalf("ReadEvents: %v", err)
+	}
+	var del *store.Event
+	for i := range events {
+		if events[i].Type == "DELETE" && events[i].Key == "/dk" {
+			del = &events[i]
+		}
+	}
+	if del == nil {
+		t.Fatal("no DELETE event for /dk")
+	}
+	if del.PrevKV == nil {
+		t.Fatal("DELETE event PrevKV is nil — apiserver would reject it and relist")
+	}
+	if string(del.PrevKV.Value) != "hello" {
+		t.Errorf("DELETE PrevKV value: got %q, want %q", del.PrevKV.Value, "hello")
 	}
 }
 
