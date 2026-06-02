@@ -15,6 +15,9 @@ import (
 //go:embed txn.lua
 var txnLua string
 
+//go:embed write.lua
+var writeLua string
+
 // ErrTxnFailed is returned when a Txn compare condition is not satisfied.
 var ErrTxnFailed = errors.New("txn compare failed")
 
@@ -327,57 +330,39 @@ func lexSuccessor(s string) (string, bool) {
 	return "", false
 }
 
-// Put stores a key-value pair, increments the revision, and appends to the event stream.
+// Put stores a key-value pair, increments the revision, and appends to the event
+// stream — all in one atomic Redis round-trip via write.lua (was 3 sequential
+// round-trips: GET + INCR + pipeline). Returns the new revision and the
+// overwritten value (nil on create).
 func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID int64) (int64, *KeyValue, error) {
-	existing, err := r.get(ctx, key)
+	keys := []string{redisKey(key), revisionKey, eventStream, keyIndex}
+	res, err := writeScript.Run(ctx, r.client, keys, "PUT", string(value), leaseID).Slice()
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, fmt.Errorf("put script: %w", err)
 	}
-
-	rev, err := r.incrRevision(ctx)
-	if err != nil {
-		return 0, nil, err
+	rev := scriptRev(res)
+	var existing *KeyValue
+	if len(res) >= 2 {
+		if blob, ok := res[1].(string); ok && blob != "" {
+			existing = decodeKV(key, []byte(blob))
+		}
 	}
-
-	createRevision := rev
-	version := int64(1)
-	if existing != nil {
-		createRevision = existing.CreateRevision
-		version = existing.Version + 1
-	}
-
-	data := encodeKV(createRevision, rev, version, leaseID, value)
-
-	streamValues := map[string]interface{}{
-		"type": "PUT",
-		"key":  key,
-		"rev":  rev,
-		"data": string(data),
-	}
-	if existing != nil {
-		prevData := encodeKV(existing.CreateRevision, existing.ModRevision, existing.Version, existing.Lease, existing.Value)
-		streamValues["prev_data"] = string(prevData)
-	}
-
-	pipe := r.client.Pipeline()
-	pipe.Set(ctx, redisKey(key), data, 0)
-	pipe.ZAdd(ctx, keyIndex, redis.Z{Score: 0, Member: key})
-	pipe.XAdd(ctx, &redis.XAddArgs{
-		Stream: eventStream,
-		ID:     "*",
-		Values: streamValues,
-	})
-	if existing != nil && existing.Lease != 0 && existing.Lease != leaseID {
-		pipe.SRem(ctx, leaseKeysSetKey(existing.Lease), key)
-	}
-	if leaseID != 0 {
-		pipe.SAdd(ctx, leaseKeysSetKey(leaseID), key)
-	}
-	if _, err := pipe.Exec(ctx); err != nil {
-		return 0, nil, fmt.Errorf("pipeline exec: %w", err)
-	}
-
 	return rev, existing, nil
+}
+
+// scriptRev parses the revision (element 0, a string) from a write.lua result.
+func scriptRev(res []interface{}) int64 {
+	if len(res) == 0 {
+		return 0
+	}
+	switch v := res[0].(type) {
+	case string:
+		n, _ := strconv.ParseInt(v, 10, 64)
+		return n
+	case int64:
+		return v
+	}
+	return 0
 }
 
 // Get retrieves a single key. Returns nil if the key does not exist.
@@ -450,51 +435,33 @@ func (r *RedisStore) Range(ctx context.Context, prefix string) (int64, []*KeyVal
 	return rev, results, nil
 }
 
-// Delete removes a key and appends a delete event to the stream.
+// Delete removes a key and appends a delete event to the stream — one atomic
+// Redis round-trip via write.lua. The DELETE event carries prev_data (the
+// deleted object) so the apiserver's WithPrevKV watch doesn't reject it and tear
+// down its watch-cache. Returns the new revision and the deleted value (nil if
+// the key was absent, in which case the revision is not bumped).
 func (r *RedisStore) Delete(ctx context.Context, key string) (int64, *KeyValue, error) {
-	existing, err := r.get(ctx, key)
+	keys := []string{redisKey(key), revisionKey, eventStream, keyIndex}
+	res, err := writeScript.Run(ctx, r.client, keys, "DELETE", "", 0).Slice()
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, fmt.Errorf("delete script: %w", err)
 	}
-	if existing == nil {
-		rev, _ := r.CurrentRevision(ctx)
-		return rev, nil, nil
+	rev := scriptRev(res)
+	var prev *KeyValue
+	if len(res) >= 2 {
+		if blob, ok := res[1].(string); ok && blob != "" {
+			prev = decodeKV(key, []byte(blob))
+		}
 	}
-
-	rev, err := r.incrRevision(ctx)
-	if err != nil {
-		return 0, nil, err
-	}
-
-	pipe := r.client.Pipeline()
-	pipe.Del(ctx, redisKey(key))
-	pipe.ZRem(ctx, keyIndex, key)
-	// Carry the deleted object as prev_data: the apiserver opens storage watches
-	// WithPrevKV and rejects a DELETE event whose PrevKv is nil ("watch chan
-	// error ... PrevKv=nil"), which tears down its whole watch-cache for the
-	// resource and forces every client to relist. existing is non-nil here.
-	pipe.XAdd(ctx, &redis.XAddArgs{
-		Stream: eventStream,
-		ID:     "*",
-		Values: map[string]interface{}{
-			"type":      "DELETE",
-			"key":       key,
-			"rev":       rev,
-			"prev_data": string(encodeKV(existing.CreateRevision, existing.ModRevision, existing.Version, existing.Lease, existing.Value)),
-		},
-	})
-	if existing.Lease != 0 {
-		pipe.SRem(ctx, leaseKeysSetKey(existing.Lease), key)
-	}
-	if _, err := pipe.Exec(ctx); err != nil {
-		return 0, nil, fmt.Errorf("pipeline exec: %w", err)
-	}
-
-	return rev, existing, nil
+	return rev, prev, nil
 }
 
 // txnScript is loaded from txn.lua at compile time via go:embed.
 var txnScript = redis.NewScript(txnLua)
+
+// writeScript (write.lua) does an atomic unconditional PUT or DELETE in one
+// round-trip; used by Put and Delete.
+var writeScript = redis.NewScript(writeLua)
 
 // TxnResult is returned by Txn.
 type TxnResult struct {

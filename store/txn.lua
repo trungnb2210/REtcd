@@ -74,10 +74,13 @@ local etcd_key = string.sub(KEYS[1], 4) -- strip "kv:" prefix
 if op == 'DELETE' then
     redis.call('DEL',  KEYS[1])
     redis.call('ZREM', KEYS[4], etcd_key)
+    -- prev_data (the deleted object) is required: the apiserver's WithPrevKV
+    -- watch rejects a DELETE event with PrevKv=nil and tears down its cache.
     redis.call('XADD', KEYS[3], '*',
         'type', 'DELETE',
         'key',  etcd_key,
-        'rev',  tostring(new_rev))
+        'rev',  tostring(new_rev),
+        'prev_data', current_raw)
 else
     local create_rev = current_raw and current_create_rev or new_rev
     local version    = current_raw and (current_version + 1) or 1
