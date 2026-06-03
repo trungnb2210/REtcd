@@ -17,6 +17,7 @@ type fakeStore struct {
 	data   map[string]*store.KeyValue
 	rev    int64
 	events []store.Event // append-only event log
+	sink   func(store.Event)
 
 	// Error injection for BlockReadEvents. failFirst causes the first N calls to
 	// return a transient error; failAll causes every call to error. blockCalls
@@ -30,6 +31,11 @@ func newFakeStore() *fakeStore {
 	return &fakeStore{data: make(map[string]*store.KeyValue)}
 }
 
+// SetEventSink mirrors RedisStore: the watch dispatcher registers disp.ingest
+// here so writes fan out in-process. Reads f.sink without the lock is fine — it
+// is set once at server construction, before any write.
+func (f *fakeStore) SetEventSink(sink func(store.Event)) { f.sink = sink }
+
 func (f *fakeStore) incrRev() int64 {
 	f.rev++
 	return f.rev
@@ -37,7 +43,6 @@ func (f *fakeStore) incrRev() int64 {
 
 func (f *fakeStore) Put(_ context.Context, key string, value []byte, leaseID int64) (int64, *store.KeyValue, error) {
 	f.mu.Lock()
-	defer f.mu.Unlock()
 
 	prev := f.data[key]
 	rev := f.incrRev()
@@ -58,7 +63,14 @@ func (f *fakeStore) Put(_ context.Context, key string, value []byte, leaseID int
 		Lease:          leaseID,
 	}
 	f.data[key] = kv
-	f.events = append(f.events, store.Event{Type: "PUT", Key: key, Rev: rev, KV: kv})
+	ev := store.Event{Type: "PUT", Key: key, Rev: rev, KV: kv, PrevKV: prev}
+	f.events = append(f.events, ev)
+	sink := f.sink
+	f.mu.Unlock()
+
+	if sink != nil {
+		sink(ev)
+	}
 	return rev, prev, nil
 }
 
@@ -88,20 +100,27 @@ func (f *fakeStore) Range(_ context.Context, prefix string) (int64, []*store.Key
 
 func (f *fakeStore) Delete(_ context.Context, key string) (int64, *store.KeyValue, error) {
 	f.mu.Lock()
-	defer f.mu.Unlock()
 	prev := f.data[key]
 	if prev == nil {
-		return f.rev, nil, nil
+		rev := f.rev
+		f.mu.Unlock()
+		return rev, nil, nil
 	}
 	rev := f.incrRev()
 	delete(f.data, key)
-	f.events = append(f.events, store.Event{Type: "DELETE", Key: key, Rev: rev})
+	ev := store.Event{Type: "DELETE", Key: key, Rev: rev, PrevKV: prev}
+	f.events = append(f.events, ev)
+	sink := f.sink
+	f.mu.Unlock()
+
+	if sink != nil {
+		sink(ev)
+	}
 	return rev, prev, nil
 }
 
 func (f *fakeStore) Txn(_ context.Context, key string, expectedModRevision int64, successOp string, newValue []byte, leaseID int64) (*store.TxnResult, error) {
 	f.mu.Lock()
-	defer f.mu.Unlock()
 
 	current := f.data[key]
 	var currentModRev int64
@@ -112,16 +131,21 @@ func (f *fakeStore) Txn(_ context.Context, key string, expectedModRevision int64
 	// Check compare condition.
 	if expectedModRevision == -1 {
 		if current != nil {
-			return &store.TxnResult{Succeeded: false, Revision: f.rev, Current: current}, nil
+			res := &store.TxnResult{Succeeded: false, Revision: f.rev, Current: current}
+			f.mu.Unlock()
+			return res, nil
 		}
 	} else if currentModRev != expectedModRevision {
-		return &store.TxnResult{Succeeded: false, Revision: f.rev, Current: current}, nil
+		res := &store.TxnResult{Succeeded: false, Revision: f.rev, Current: current}
+		f.mu.Unlock()
+		return res, nil
 	}
 
 	rev := f.incrRev()
+	var ev store.Event
 	if successOp == "DELETE" {
 		delete(f.data, key)
-		f.events = append(f.events, store.Event{Type: "DELETE", Key: key, Rev: rev})
+		ev = store.Event{Type: "DELETE", Key: key, Rev: rev, PrevKV: current}
 	} else {
 		createRev := rev
 		version := int64(1)
@@ -138,7 +162,14 @@ func (f *fakeStore) Txn(_ context.Context, key string, expectedModRevision int64
 			Lease:          leaseID,
 		}
 		f.data[key] = kv
-		f.events = append(f.events, store.Event{Type: "PUT", Key: key, Rev: rev, KV: kv})
+		ev = store.Event{Type: "PUT", Key: key, Rev: rev, KV: kv, PrevKV: current}
+	}
+	f.events = append(f.events, ev)
+	sink := f.sink
+	f.mu.Unlock()
+
+	if sink != nil {
+		sink(ev)
 	}
 	return &store.TxnResult{Succeeded: true, Revision: rev}, nil
 }

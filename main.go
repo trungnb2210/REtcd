@@ -48,7 +48,6 @@ func main() {
 	}
 
 	rdb := store.NewRedisStore(redisAddr)
-	rdb.StartLeaseReaper(context.Background())
 
 	grpcServer := grpc.NewServer(
 		grpc.UnaryInterceptor(server.UnaryMetricsInterceptor),
@@ -75,6 +74,11 @@ func main() {
 	pb.RegisterWatchServer(grpcServer, server.NewWatchServer(rdb))
 	pb.RegisterLeaseServer(grpcServer, server.NewLeaseServer(rdb))
 	pb.RegisterMaintenanceServer(grpcServer, server.NewMaintenanceServer(rdb))
+
+	// Start the lease reaper after NewWatchServer has registered the event sink,
+	// so lease-expiry deletes fan out to live watches in-process rather than being
+	// missed during the startup window.
+	rdb.StartLeaseReaper(context.Background())
 
 	m := cmux.New(lis)
 	grpcL := m.MatchWithWriters(

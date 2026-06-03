@@ -67,6 +67,15 @@ var (
 		Buckets: prometheus.ExponentialBuckets(1, 2, 20), // 1 … ~1M
 	})
 
+	// watchReorderFlushes counts how often the in-process dispatch reorder buffer
+	// hit its cap and force-released a revision gap. Should stay 0 — a non-zero
+	// value means a committed write failed to emit its event (a bug worth
+	// chasing), since the buffer otherwise releases in contiguous revision order.
+	watchReorderFlushes = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "retcd_watch_reorder_flushes_total",
+		Help: "Times the in-process dispatch reorder buffer force-released a revision gap (should be 0).",
+	})
+
 	// watchCreates attributes watch-establishment churn: which resource prefix
 	// (e.g. /registry/pods) and whether it asked to catch up from a historical
 	// revision ("catchup") or start from now ("fromnow"). High catchup churn on a

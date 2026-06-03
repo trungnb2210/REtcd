@@ -8,9 +8,13 @@
 --
 -- KEYS[1]=redisKey(key)  KEYS[2]=revisionKey  KEYS[3]=eventStream  KEYS[4]=keyindex
 -- ARGV[1]="PUT"|"DELETE"  ARGV[2]=value (PUT)  ARGV[3]=lease_id
--- returns {new_rev_string, existing_blob_or_empty}
---   PUT:    existing_blob = overwritten value ('' on create)
---   DELETE: existing_blob = deleted value ('' if key was absent, no INCR then)
+-- returns {new_rev_string, existing_blob_or_empty, new_blob_or_empty, stream_id_or_empty}
+--   existing_blob = overwritten/deleted value ('' on create or absent delete)
+--   new_blob      = the freshly written value (PUT only; '' for DELETE) — lets the
+--                   Go side build the watch event in-process without re-reading it
+--   stream_id     = the XADD entry ID ('' when no event was appended, i.e. an
+--                   absent DELETE) — drives in-process watch dispatch + the
+--                   delivery-latency metric
 
 local function dec64(s, off)
     local v = 0
@@ -33,16 +37,16 @@ if current_raw and #current_raw >= 32 then cur_lease = dec64(current_raw, 25) en
 if op == 'DELETE' then
     if not current_raw then
         -- nothing to delete: don't bump the revision (matches old Go behaviour)
-        return {tostring(tonumber(redis.call('GET', KEYS[2]) or '0') or 0), ''}
+        return {tostring(tonumber(redis.call('GET', KEYS[2]) or '0') or 0), '', '', ''}
     end
     local new_rev = redis.call('INCR', KEYS[2])
     redis.call('DEL',  KEYS[1])
     redis.call('ZREM', KEYS[4], etcd_key)
     if cur_lease ~= 0 then redis.call('SREM', 'lease:keys:' .. cur_lease, etcd_key) end
-    redis.call('XADD', KEYS[3], '*',
+    local sid = redis.call('XADD', KEYS[3], '*',
         'type', 'DELETE', 'key', etcd_key, 'rev', tostring(new_rev),
         'prev_data', current_raw)
-    return {tostring(new_rev), current_raw}
+    return {tostring(new_rev), current_raw, '', sid}
 end
 
 -- PUT
@@ -61,13 +65,14 @@ redis.call('SET',  KEYS[1], new_blob)
 redis.call('ZADD', KEYS[4], 0, etcd_key)
 if cur_lease ~= 0 and cur_lease ~= lease then redis.call('SREM', 'lease:keys:' .. cur_lease, etcd_key) end
 if lease ~= 0 then redis.call('SADD', 'lease:keys:' .. lease, etcd_key) end
+local sid
 if current_raw then
-    redis.call('XADD', KEYS[3], '*',
+    sid = redis.call('XADD', KEYS[3], '*',
         'type', 'PUT', 'key', etcd_key, 'rev', tostring(new_rev),
         'data', new_blob, 'prev_data', current_raw)
 else
-    redis.call('XADD', KEYS[3], '*',
+    sid = redis.call('XADD', KEYS[3], '*',
         'type', 'PUT', 'key', etcd_key, 'rev', tostring(new_rev),
         'data', new_blob)
 end
-return {tostring(new_rev), current_raw or ''}
+return {tostring(new_rev), current_raw or '', new_blob, sid}

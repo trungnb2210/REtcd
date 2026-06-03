@@ -20,9 +20,12 @@ type WatchServer struct {
 
 func NewWatchServer(s Store) *WatchServer {
 	disp := newEventDispatcher(s)
-	// One shared reader for the lifetime of the server, tailing the event stream
-	// for all watches at once.
-	go disp.run(context.Background())
+	// Seed the revision watermarks, then wire the dispatcher as the store's event
+	// sink: every committed write now fans out in-process via disp.ingest, with no
+	// XREAD readback. The Redis stream is still written and still backs historical
+	// catch-up (catchUp), but live delivery no longer waits on a re-read.
+	disp.prime(context.Background())
+	s.SetEventSink(disp.ingest)
 	return &WatchServer{store: s, disp: disp}
 }
 
@@ -259,6 +262,7 @@ func (s *WatchServer) catchUp(ctx context.Context, sender *sender, id int64, key
 	lastID := s.disp.seekStreamID(startRevision)
 	var scanned int64
 	firstDeliveryDone := false
+	consecErr := 0
 	for {
 		if ctx.Err() != nil {
 			return false
@@ -268,7 +272,24 @@ func (s *WatchServer) catchUp(ctx context.Context, sender *sender, id int64, key
 			if ctx.Err() != nil {
 				return false
 			}
+			// Transient backend error during historical catch-up. Retry from the
+			// same lastID (no events skipped); give up — loudly — only if the
+			// backend stays unavailable, so the client re-establishes instead of
+			// stalling until its resync interval. Live delivery is in-process and
+			// has no backend dependency, so this catch-up read is the only place a
+			// watch can observe a persistently dead Redis.
 			watchReadErrors.Inc()
+			consecErr++
+			if consecErr >= maxReaderErrors {
+				watchCancels.Inc()
+				_ = sender.Send(&pb.WatchResponse{
+					Header:       &pb.ResponseHeader{ClusterId: 1, MemberId: 1, Revision: s.disp.currentRev()},
+					WatchId:      id,
+					Canceled:     true,
+					CancelReason: "watch backend unavailable",
+				})
+				return false
+			}
 			select {
 			case <-ctx.Done():
 				return false
@@ -276,6 +297,7 @@ func (s *WatchServer) catchUp(ctx context.Context, sender *sender, id int64, key
 			}
 			continue
 		}
+		consecErr = 0
 		if len(events) == 0 {
 			return true // reached the tail; nothing more to catch up
 		}

@@ -18,6 +18,10 @@ type Store interface {
 	Txn(ctx context.Context, key string, expectedModRevision int64, successOp string, newValue []byte, leaseID int64) (*store.TxnResult, error)
 	CurrentRevision(ctx context.Context) (int64, error)
 	BlockReadEvents(ctx context.Context, lastID string, maxCount int64) ([]store.Event, string, error)
+	// SetEventSink registers a callback the store invokes the moment each write
+	// commits, so the watch dispatcher can fan the event out in-process instead
+	// of reading it back off the Redis stream.
+	SetEventSink(func(store.Event))
 }
 
 // KVServer implements the etcd v3 KV gRPC service backed by Redis.

@@ -69,6 +69,17 @@ func (m *mockWatchStream) sawCanceled() bool {
 	return false
 }
 
+func (m *mockWatchStream) sawCreated() bool {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	for _, r := range m.sent {
+		if r.Created {
+			return true
+		}
+	}
+	return false
+}
+
 func watchCreateReq(key string, startRev int64) *pb.WatchRequest {
 	return &pb.WatchRequest{
 		RequestUnion: &pb.WatchRequest_CreateRequest{
@@ -137,5 +148,37 @@ func TestWatchCancelsOnPersistentFailure(t *testing.T) {
 	// maxConsecErrors (30) * 50ms backoff ≈ 1.5s before the cancel is emitted.
 	if !waitFor(stream.sawCanceled, 5*time.Second) {
 		t.Fatalf("watch did not emit Canceled on persistent backend failure (would stall the client until resync)")
+	}
+}
+
+// A "from now" watch must receive a key written AFTER it was created, delivered
+// through the in-process sink→ingest→fan-out path (no XREAD readback). The store
+// is seeded with prior history so the new write's revision sits clearly above the
+// watch's catch-up boundary, exercising live delivery.
+func TestWatchDeliversWriteAfterCreate(t *testing.T) {
+	fs := newFakeStore()
+	fs.rev = 5 // pretend the cluster already has revision history
+
+	ws := server.NewWatchServer(fs)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	stream := newMockWatchStream(ctx)
+	stream.recvCh <- watchCreateReq("foo", 0) // StartRevision 0 = watch from now
+	go func() { _ = ws.Watch(stream) }()
+
+	if !waitFor(stream.sawCreated, 2*time.Second) {
+		t.Fatal("watch was never created")
+	}
+	// Let the watch register before writing so the event takes the live path; if
+	// it races registration, catch-up still covers it, so delivery is guaranteed.
+	time.Sleep(50 * time.Millisecond)
+
+	if _, _, err := fs.Put(ctx, "foo", []byte("bar"), 0); err != nil {
+		t.Fatalf("put: %v", err)
+	}
+
+	if !waitFor(func() bool { return stream.deliveredKey("foo") }, 2*time.Second) {
+		t.Fatal("write after watch-create was not delivered (sink→ingest wiring broken)")
 	}
 }

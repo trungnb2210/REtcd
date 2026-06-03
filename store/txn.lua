@@ -7,10 +7,12 @@
 --   bytes 25-32  lease           (int64)
 --   bytes 33+    raw value bytes
 --
--- Returns {succeeded, current_blob_or_empty, revision_string}
---   succeeded = 1 (compare passed, write done) or 0 (compare failed)
---   current_blob_or_empty = existing binary blob on failure, '' on success
---   revision_string = new global revision on success, current on failure
+-- Returns on FAILURE: {0, current_blob_or_empty, revision_string}
+-- Returns on SUCCESS: {1, prev_blob_or_empty, revision_string, new_blob_or_empty, stream_id}
+--   prev_blob = the overwritten/deleted value ('' for a create) — the watch event's PrevKv
+--   new_blob  = the freshly written value (PUT only; '' for DELETE) — the event's Kv
+--   stream_id = the XADD entry ID — drives in-process watch dispatch + the latency metric
+-- (FAILURE keeps the 3-element shape; the Go side only reads index 3 on success.)
 --
 -- KEYS[1] = redisKey(key)   e.g. "kv:/registry/pods/default/mypod"
 -- KEYS[2] = revisionKey     "global:revision"
@@ -67,16 +69,18 @@ elseif current_mod_rev ~= expected then
 end
 
 -- Compare passed — perform the write.
-local new_rev  = redis.call('INCR', KEYS[2])
-local op       = ARGV[3]
-local etcd_key = string.sub(KEYS[1], 4) -- strip "kv:" prefix
+local new_rev   = redis.call('INCR', KEYS[2])
+local op        = ARGV[3]
+local etcd_key  = string.sub(KEYS[1], 4) -- strip "kv:" prefix
+local new_blob  = ''
+local sid       = ''
 
 if op == 'DELETE' then
     redis.call('DEL',  KEYS[1])
     redis.call('ZREM', KEYS[4], etcd_key)
     -- prev_data (the deleted object) is required: the apiserver's WithPrevKV
     -- watch rejects a DELETE event with PrevKv=nil and tears down its cache.
-    redis.call('XADD', KEYS[3], '*',
+    sid = redis.call('XADD', KEYS[3], '*',
         'type', 'DELETE',
         'key',  etcd_key,
         'rev',  tostring(new_rev),
@@ -86,19 +90,19 @@ else
     local version    = current_raw and (current_version + 1) or 1
     local lease      = tonumber(ARGV[4]) or 0
 
-    local new_blob = enc64(create_rev) .. enc64(new_rev) .. enc64(version) .. enc64(lease) .. ARGV[2]
+    new_blob = enc64(create_rev) .. enc64(new_rev) .. enc64(version) .. enc64(lease) .. ARGV[2]
     redis.call('SET',  KEYS[1], new_blob)
     redis.call('ZADD', KEYS[4], 0, etcd_key)
 
     if current_raw then
-        redis.call('XADD', KEYS[3], '*',
+        sid = redis.call('XADD', KEYS[3], '*',
             'type',      'PUT',
             'key',       etcd_key,
             'rev',       tostring(new_rev),
             'data',      new_blob,
             'prev_data', current_raw)
     else
-        redis.call('XADD', KEYS[3], '*',
+        sid = redis.call('XADD', KEYS[3], '*',
             'type', 'PUT',
             'key',  etcd_key,
             'rev',  tostring(new_rev),
@@ -106,4 +110,6 @@ else
     end
 end
 
-return {1, '', tostring(new_rev)}
+-- prev blob (index 2) is the pre-image: the overwritten value on UPDATE, the
+-- deleted object on DELETE, '' on a create. The Go side uses it as the event PrevKv.
+return {1, current_raw or '', tostring(new_rev), new_blob, sid}

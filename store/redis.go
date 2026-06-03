@@ -209,6 +209,56 @@ func decodeKV(key string, data []byte) *KeyValue {
 
 type RedisStore struct {
 	client *redis.Client
+	// sink, if set, receives every event the moment a write completes — the
+	// in-process watch short-circuit. It lets the dispatcher fan an event out
+	// from the write path instead of reading it back off the Redis stream via
+	// XREAD, removing one Redis→server round-trip from watch propagation.
+	sink func(Event)
+}
+
+// SetEventSink registers the in-process event sink. The watch dispatcher wires
+// its ordered-ingest here; nil (the default) just means events are only durably
+// recorded on the Redis stream and picked up via catch-up, never live.
+func (r *RedisStore) SetEventSink(sink func(Event)) { r.sink = sink }
+
+// emit hands a freshly written event to the sink if one is registered. sid is
+// the XADD stream ID ("" when no event was appended, e.g. an absent DELETE — in
+// which case nothing is emitted, preserving the contiguity of dispatched revs).
+func (r *RedisStore) emit(typ, key string, rev int64, newBlob, prevBlob []byte, sid string) {
+	if r.sink == nil || sid == "" || rev <= 0 {
+		return
+	}
+	r.sink(makeEvent(typ, key, rev, newBlob, prevBlob, sid))
+}
+
+// makeEvent builds a store.Event from the blobs and stream ID a write returns,
+// so the watch event is assembled in-process with no extra Redis read. CreatedMs
+// is parsed from the stream ID's millisecond prefix (the XADD/append time), the
+// basis for the watch-delivery latency metric.
+func makeEvent(typ, key string, rev int64, newBlob, prevBlob []byte, sid string) Event {
+	ev := Event{Type: typ, Key: key, Rev: rev, ID: sid}
+	if dash := strings.IndexByte(sid, '-'); dash > 0 {
+		if ms, err := strconv.ParseInt(sid[:dash], 10, 64); err == nil {
+			ev.CreatedMs = ms
+		}
+	}
+	if typ == "PUT" && len(newBlob) >= 32 {
+		ev.KV = decodeKV(key, newBlob)
+	}
+	if len(prevBlob) >= 32 {
+		ev.PrevKV = decodeKV(key, prevBlob)
+	}
+	return ev
+}
+
+// scriptStr returns element i of a Lua script result as a string, "" if absent.
+func scriptStr(res []interface{}, i int) string {
+	if i < len(res) {
+		if s, ok := res[i].(string); ok {
+			return s
+		}
+	}
+	return ""
 }
 
 func NewRedisStore(addr string) *RedisStore {
@@ -255,6 +305,26 @@ func (r *RedisStore) incrRevision(ctx context.Context) (int64, error) {
 		return 0, fmt.Errorf("incr revision: %w", err)
 	}
 	return rev, nil
+}
+
+// RawRevision returns the underlying revision counter without the ≥1 clamp that
+// CurrentRevision applies. The watch dispatcher seeds its reorder buffer's "next
+// revision to release" with raw+1: on a fresh store the counter is 0 and the
+// first write is rev 1, whereas CurrentRevision reports 1 there and would make
+// rev 1 look like an already-released duplicate, dropping the first live event.
+func (r *RedisStore) RawRevision(ctx context.Context) (int64, error) {
+	val, err := r.client.Get(ctx, revisionKey).Result()
+	if err == redis.Nil {
+		return 0, nil
+	}
+	if err != nil {
+		return 0, err
+	}
+	n, err := strconv.ParseInt(val, 10, 64)
+	if err != nil || n < 0 {
+		return 0, nil
+	}
+	return n, nil
 }
 
 // CurrentRevision returns the current global revision without incrementing.
@@ -341,11 +411,15 @@ func (r *RedisStore) Put(ctx context.Context, key string, value []byte, leaseID 
 		return 0, nil, fmt.Errorf("put script: %w", err)
 	}
 	rev := scriptRev(res)
+	existingBlob := scriptStr(res, 1)
+	newBlob := scriptStr(res, 2)
+	sid := scriptStr(res, 3)
+
+	r.emit("PUT", key, rev, []byte(newBlob), []byte(existingBlob), sid)
+
 	var existing *KeyValue
-	if len(res) >= 2 {
-		if blob, ok := res[1].(string); ok && blob != "" {
-			existing = decodeKV(key, []byte(blob))
-		}
+	if existingBlob != "" {
+		existing = decodeKV(key, []byte(existingBlob))
 	}
 	return rev, existing, nil
 }
@@ -447,11 +521,15 @@ func (r *RedisStore) Delete(ctx context.Context, key string) (int64, *KeyValue, 
 		return 0, nil, fmt.Errorf("delete script: %w", err)
 	}
 	rev := scriptRev(res)
+	prevBlob := scriptStr(res, 1)
+	sid := scriptStr(res, 3)
+
+	// sid == "" for an absent delete (no INCR, no event) → emit is a no-op.
+	r.emit("DELETE", key, rev, nil, []byte(prevBlob), sid)
+
 	var prev *KeyValue
-	if len(res) >= 2 {
-		if blob, ok := res[1].(string); ok && blob != "" {
-			prev = decodeKV(key, []byte(blob))
-		}
+	if prevBlob != "" {
+		prev = decodeKV(key, []byte(prevBlob))
 	}
 	return rev, prev, nil
 }
@@ -510,6 +588,14 @@ func (r *RedisStore) Txn(
 	}
 	if result.Revision == 0 {
 		result.Revision, _ = r.CurrentRevision(ctx)
+	}
+
+	// On success the script returns the pre-image (index 1), the new blob
+	// (index 3, "" for DELETE) and the stream ID (index 4) so the watch event is
+	// dispatched in-process — no XREAD readback. successOp is "PUT" or "DELETE".
+	if succeeded {
+		r.emit(successOp, key, result.Revision,
+			[]byte(scriptStr(res, 3)), []byte(scriptStr(res, 1)), scriptStr(res, 4))
 	}
 
 	return result, nil
