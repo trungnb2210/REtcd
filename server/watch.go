@@ -18,6 +18,8 @@ type WatchServer struct {
 	disp  *eventDispatcher
 }
 
+// NewWatchServer returns a WatchServer backed by the given Store and registers
+// its dispatcher as the store's event sink for in-process watch fan-out.
 func NewWatchServer(s Store) *WatchServer {
 	disp := newEventDispatcher(s)
 	// Seed the revision watermarks, then wire the dispatcher as the store's event

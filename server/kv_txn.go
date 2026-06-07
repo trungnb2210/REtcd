@@ -138,6 +138,10 @@ func (s *KVServer) update(ctx context.Context, key string, expectedRev int64, va
 // and their responses are returned. There is a small read-then-write race window;
 // for the patterns Kubernetes actually sends here (apiserver compactor CAS on a
 // single dedicated key) that window is benign.
+
+// This potentially can be apart of future work since this can also implemented
+// as a lua script, which would provide the atomicity like the hot path of create
+// or update.
 func (s *KVServer) genericTxn(ctx context.Context, req *pb.TxnRequest) (*pb.TxnResponse, error) {
 	succeeded, err := s.evalCompares(ctx, req.Compare)
 	if err != nil {

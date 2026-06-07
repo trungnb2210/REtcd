@@ -10,8 +10,9 @@ import (
 // Range handles both single-key Gets and prefix/range List operations.
 //
 // etcd encodes a prefix scan as:
-//   key      = "/registry/pods/default/"
-//   rangeEnd = "/registry/pods/default0"   (last byte of key incremented by 1)
+//
+//	key      = "/registry/pods/default/"
+//	rangeEnd = "/registry/pods/default0"   (last byte of key incremented by 1)
 //
 // An empty rangeEnd means single key lookup.
 // A rangeEnd of "\x00" means "all keys from key onwards".

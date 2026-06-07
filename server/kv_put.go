@@ -10,12 +10,14 @@ import (
 // Every Kubernetes resource creation that bypasses Txn comes through here,
 // though in practice most writes use Txn (compare-and-swap).
 //
-// Correctness note: the revision increment and the store are not perfectly
-// atomic (Redis INCR + pipeline). Two concurrent Puts will get distinct
-// revisions, but a crash between INCR and SET would leave the revision
-// incremented with no matching key written. Acceptable for a single-node FYP;
-// worth noting as a limitation in the write-up.
+// Atomicity: the revision increment, key write, and event append all run inside
+// a single Redis Lua script (write.lua), so they apply as one unit — no torn
+// state and event-stream order matches revision order even under concurrent
+// writers. The remaining durability caveat is Redis-level: a single AOF-backed
+// instance can lose up to one fsync window (~1s with appendfsync everysec) of
+// acknowledged writes on a host crash. Worth noting as a limitation.
 func (s *KVServer) Put(ctx context.Context, req *pb.PutRequest) (*pb.PutResponse, error) {
+	// TODO: ignore_value/ignore_lease not supported
 	rev, prevKV, err := s.store.Put(ctx, string(req.Key), req.Value, req.Lease)
 	if err != nil {
 		return nil, err

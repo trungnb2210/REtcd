@@ -7,15 +7,18 @@ import (
 	pb "go.etcd.io/etcd/api/v3/etcdserverpb"
 )
 
+// LeaseServer implements the etcd v3 Lease gRPC service backed by Redis.
 type LeaseServer struct {
 	pb.UnimplementedLeaseServer
 	store *store.RedisStore
 }
 
+// NewLeaseServer returns a LeaseServer backed by the given Redis store.
 func NewLeaseServer(store *store.RedisStore) *LeaseServer {
 	return &LeaseServer{store: store}
 }
 
+// LeaseGrant creates a new lease with the requested TTL (defaulting to 30s).
 func (s *LeaseServer) LeaseGrant(ctx context.Context, req *pb.LeaseGrantRequest) (*pb.LeaseGrantResponse, error) {
 	ttl := req.TTL
 	if ttl <= 0 {
@@ -32,6 +35,7 @@ func (s *LeaseServer) LeaseGrant(ctx context.Context, req *pb.LeaseGrantRequest)
 	}, nil
 }
 
+// LeaseRevoke revokes a lease and deletes all keys attached to it.
 func (s *LeaseServer) LeaseRevoke(ctx context.Context, req *pb.LeaseRevokeRequest) (*pb.LeaseRevokeResponse, error) {
 	if err := s.store.LeaseRevoke(ctx, req.ID); err != nil {
 		return nil, err
@@ -41,6 +45,8 @@ func (s *LeaseServer) LeaseRevoke(ctx context.Context, req *pb.LeaseRevokeReques
 	}, nil
 }
 
+// LeaseKeepAlive is the bidirectional stream that renews leases; it replies with
+// TTL=0 when a lease no longer exists to signal expiry to the client.
 func (s *LeaseServer) LeaseKeepAlive(stream pb.Lease_LeaseKeepAliveServer) error {
 	for {
 		req, err := stream.Recv()
@@ -67,6 +73,7 @@ func (s *LeaseServer) LeaseKeepAlive(stream pb.Lease_LeaseKeepAliveServer) error
 	}
 }
 
+// LeaseTimeToLive reports the granted and remaining TTL for a lease.
 func (s *LeaseServer) LeaseTimeToLive(ctx context.Context, req *pb.LeaseTimeToLiveRequest) (*pb.LeaseTimeToLiveResponse, error) {
 	granted, remaining, err := s.store.LeaseTimeToLive(ctx, req.ID)
 	if err != nil {
@@ -80,6 +87,7 @@ func (s *LeaseServer) LeaseTimeToLive(ctx context.Context, req *pb.LeaseTimeToLi
 	}, nil
 }
 
+// LeaseLeases lists all active leases. It is a stub returning an empty response.
 func (s *LeaseServer) LeaseLeases(ctx context.Context, req *pb.LeaseLeasesRequest) (*pb.LeaseLeasesResponse, error) {
 	return &pb.LeaseLeasesResponse{}, nil
 }

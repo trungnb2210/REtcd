@@ -14,8 +14,8 @@ const (
 	leaseSetKey    = "leases"
 )
 
-func leaseDataKey(id int64) string     { return fmt.Sprintf("lease:%d", id) }
-func leaseKeysSetKey(id int64) string  { return fmt.Sprintf("lease:keys:%d", id) }
+func leaseDataKey(id int64) string    { return fmt.Sprintf("lease:%d", id) }
+func leaseKeysSetKey(id int64) string { return fmt.Sprintf("lease:keys:%d", id) }
 
 // LeaseGrant creates a new lease with the given TTL in seconds.
 func (r *RedisStore) LeaseGrant(ctx context.Context, ttl int64) (int64, error) {

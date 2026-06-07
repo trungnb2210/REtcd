@@ -153,7 +153,7 @@ func TestEventSinkEmitsForTxn(t *testing.T) {
 		t.Fatalf("txn delete event wrong: %+v", evs[2])
 	}
 	// Revisions strictly ascend across the three writes.
-	if !(evs[0].Rev < evs[1].Rev && evs[1].Rev < evs[2].Rev) {
+	if evs[0].Rev >= evs[1].Rev || evs[1].Rev >= evs[2].Rev {
 		t.Fatalf("txn event revisions not ascending: %d %d %d", evs[0].Rev, evs[1].Rev, evs[2].Rev)
 	}
 }

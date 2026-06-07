@@ -2,11 +2,21 @@ package server
 
 import (
 	"context"
+	"sync/atomic"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"google.golang.org/grpc"
+)
+
+// inflightCur / inflightMax track datastore-side request concurrency — which
+// point on the propbench --writers curve the real workload reaches. inflightMax
+// is a high-water mark so the storm peak survives regardless of scrape timing.
+// This is the L1 "is the high-concurrency storm regime even reached?" instrument.
+var (
+	inflightCur atomic.Int64
+	inflightMax atomic.Int64
 )
 
 // Metrics for attributing the Knative cold-start tail. The hypotheses each one
@@ -15,11 +25,11 @@ import (
 //   - rpcDuration            — is any single RPC class slow? (write path)
 //   - watchDelivery          — how long from event-write to client-delivery? (watch lag)
 //   - watchSendMutexWait     — are watches blocking each other on the shared
-//                              per-stream sender? (head-of-line blocking)
+//     per-stream sender? (head-of-line blocking)
 //   - watchSendWrite         — is the gRPC write itself slow? (flow control)
 //   - activeWatches          — how many watches are live? (pool pressure context)
 //   - watchCatchupEvents     — how many events does a watch scan before reaching
-//                              its start revision? (the O(N) lastID="0" scan)
+//     its start revision? (the O(N) lastID="0" scan)
 //   - redisPool*             — is the go-redis connection pool exhausted?
 var (
 	rpcDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
@@ -76,6 +86,16 @@ var (
 		Help: "Times the in-process dispatch reorder buffer force-released a revision gap (should be 0).",
 	})
 
+	// Live and peak datastore-side concurrency (see inflightCur/inflightMax).
+	inflightRequests = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "retcd_inflight_requests",
+		Help: "Current in-flight unary RPCs (live datastore write/read concurrency).",
+	})
+	_ = promauto.NewGaugeFunc(prometheus.GaugeOpts{
+		Name: "retcd_inflight_requests_max",
+		Help: "Peak concurrent in-flight unary RPCs since start (storm-regime indicator).",
+	}, func() float64 { return float64(inflightMax.Load()) })
+
 	// watchCreates attributes watch-establishment churn: which resource prefix
 	// (e.g. /registry/pods) and whether it asked to catch up from a historical
 	// revision ("catchup") or start from now ("fromnow"). High catchup churn on a
@@ -106,6 +126,19 @@ var (
 // UnaryMetricsInterceptor records per-method RPC latency. It only observes a
 // histogram — no logging — so it is cheap on the hot path.
 func UnaryMetricsInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
+	cur := inflightCur.Add(1)
+	inflightRequests.Inc()
+	for {
+		m := inflightMax.Load()
+		if cur <= m || inflightMax.CompareAndSwap(m, cur) {
+			break
+		}
+	}
+	defer func() {
+		inflightCur.Add(-1)
+		inflightRequests.Dec()
+	}()
+
 	t0 := time.Now()
 	resp, err := handler(ctx, req)
 	rpcDuration.WithLabelValues(info.FullMethod).Observe(time.Since(t0).Seconds())

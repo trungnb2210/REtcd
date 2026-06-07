@@ -12,3 +12,7 @@ pkill retcd
 ./retcd & 
 
 kubectl get pod nginx 
+
+# run lint
+golangci-lint run ./...        # check
+golangci-lint run --fix ./...  # auto-fix formatting/quickfixes

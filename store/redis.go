@@ -174,23 +174,6 @@ type KeyValue struct {
 	Lease          int64
 }
 
-// encodeKV serialises a KeyValue to a compact binary blob:
-//
-//	bytes  1- 8  create_revision (big-endian int64)
-//	bytes  9-16  mod_revision
-//	bytes 17-24  version
-//	bytes 25-32  lease
-//	bytes 33+    raw value
-func encodeKV(createRev, modRev, version, lease int64, value []byte) []byte {
-	buf := make([]byte, 32+len(value))
-	binary.BigEndian.PutUint64(buf[0:], uint64(createRev))
-	binary.BigEndian.PutUint64(buf[8:], uint64(modRev))
-	binary.BigEndian.PutUint64(buf[16:], uint64(version))
-	binary.BigEndian.PutUint64(buf[24:], uint64(lease))
-	copy(buf[32:], value)
-	return buf
-}
-
 // decodeKV deserialises a binary blob written by encodeKV (or txn.lua).
 // Returns nil if data is too short to be valid.
 func decodeKV(key string, data []byte) *KeyValue {
@@ -207,6 +190,7 @@ func decodeKV(key string, data []byte) *KeyValue {
 	}
 }
 
+// RedisStore is the Redis-backed implementation of the server's Store interface.
 type RedisStore struct {
 	client *redis.Client
 	// sink, if set, receives every event the moment a write completes — the
@@ -261,6 +245,7 @@ func scriptStr(res []interface{}, i int) string {
 	return ""
 }
 
+// NewRedisStore connects to the given address using the default database (0).
 func NewRedisStore(addr string) *RedisStore {
 	return NewRedisStoreDB(addr, 0)
 }
@@ -289,6 +274,7 @@ func NewRedisStoreDB(addr string, db int) *RedisStore {
 	return r
 }
 
+// Ping verifies connectivity to Redis.
 func (r *RedisStore) Ping(ctx context.Context) error {
 	return r.client.Ping(ctx).Err()
 }
@@ -296,15 +282,6 @@ func (r *RedisStore) Ping(ctx context.Context) error {
 // PoolStats exposes the go-redis connection-pool counters for metrics.
 func (r *RedisStore) PoolStats() *redis.PoolStats {
 	return r.client.PoolStats()
-}
-
-// incrRevision atomically increments the global revision and returns the new value.
-func (r *RedisStore) incrRevision(ctx context.Context) (int64, error) {
-	rev, err := r.client.Incr(ctx, revisionKey).Result()
-	if err != nil {
-		return 0, fmt.Errorf("incr revision: %w", err)
-	}
-	return rev, nil
 }
 
 // RawRevision returns the underlying revision counter without the ≥1 clamp that
