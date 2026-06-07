@@ -40,6 +40,9 @@ load-test/propbench/propbench
 # env file
 .env
 
+# Thesis write-up (kept local, not tracked)
+write-up/
+
 # Editor/IDE
 # .idea/
 # .vscode/
