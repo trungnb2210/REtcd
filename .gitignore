@@ -43,6 +43,14 @@ load-test/propbench/propbench
 # Thesis write-up (kept local, not tracked)
 write-up/
 
+# Endgame working plan (local handoff doc for assistant sessions)
+PLAN.md
+
+# Assistant guidance / requirements docs (kept local, not tracked)
+CLAUDE.md
+AGENTS.md
+REQUIREMENTS.md
+
 # Editor/IDE
 # .idea/
 # .vscode/
