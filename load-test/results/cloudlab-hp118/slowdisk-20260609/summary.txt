@@ -1,0 +1,64 @@
+=== retcd-everysec-w0 ===
+write throughput: 1480 writes/s  (1000 writes in 0.68s, 1 writers)
+txn RTT ms         0.67     0.77     1.06     1.43     1.43     0.68
+
+=== retcd-always-w0 ===
+write throughput: 711 writes/s  (1000 writes in 1.41s, 1 writers)
+txn RTT ms         1.16     1.43     8.39    10.69    10.69     1.27
+
+=== etcd-w0 ===
+write throughput: 1369 writes/s  (1000 writes in 0.73s, 1 writers)
+txn RTT ms         0.71     0.93     1.44     2.13     2.13     0.72
+
+=== kine-sqlite-w0 ===
+write throughput: 306 writes/s  (1000 writes in 3.27s, 1 writers)
+txn RTT ms         3.02     4.44     4.97     5.50     5.50     3.26
+
+=== retcd-everysec-w1 ===
+write throughput: 1516 writes/s  (1000 writes in 0.66s, 1 writers)
+txn RTT ms         0.67     0.77     0.98     1.57     1.57     0.68
+
+=== retcd-always-w1 ===
+write throughput: 31 writes/s  (1000 writes in 32.13s, 1 writers)
+txn RTT ms        32.00    32.06    36.02    40.34    40.34    32.13
+
+=== etcd-w1 ===
+write throughput: 51 writes/s  (1000 writes in 19.65s, 1 writers)
+txn RTT ms        16.02    32.01    48.01    68.08    68.08    19.64
+
+=== kine-sqlite-w1 ===
+write throughput: 15 writes/s  (1000 writes in 64.66s, 1 writers)
+txn RTT ms        64.01    67.97    68.35    79.92    79.92    64.66
+
+=== retcd-everysec-w5 ===
+write throughput: 1500 writes/s  (1000 writes in 0.67s, 1 writers)
+txn RTT ms         0.69     0.81     1.00     1.59     1.59     0.69
+
+=== retcd-always-w5 ===
+write throughput: 21 writes/s  (1000 writes in 48.04s, 1 writers)
+txn RTT ms        47.99    48.06    51.98    59.85    59.85    48.03
+
+=== etcd-w5 ===
+write throughput: 33 writes/s  (1000 writes in 30.60s, 1 writers)
+txn RTT ms        24.03    48.00    72.00    79.69    79.69    30.53
+
+=== kine-sqlite-w5 ===
+write throughput: 10 writes/s  (1000 writes in 96.43s, 1 writers)
+txn RTT ms        96.00    96.30   100.13   112.28   112.28    96.43
+
+=== retcd-everysec-w20 ===
+write throughput: 1516 writes/s  (1000 writes in 0.66s, 1 writers)
+txn RTT ms         0.65     0.78     1.02     1.63     1.63     0.67
+
+=== retcd-always-w20 ===
+write throughput: 10 writes/s  (1000 writes in 96.03s, 1 writers)
+txn RTT ms        96.00    96.06    96.36   103.96   103.96    96.03
+
+=== etcd-w20 ===
+write throughput: 15 writes/s  (1000 writes in 67.31s, 1 writers)
+txn RTT ms        48.08    96.02   144.07   216.42   216.42    67.30
+
+=== kine-sqlite-w20 ===
+write throughput: 5 writes/s  (1000 writes in 192.30s, 1 writers)
+txn RTT ms       192.00   192.16   196.17   216.10   216.10   192.30
+

@@ -1,0 +1,18 @@
+=== etcd3-w1 (127.0.0.1:23791) ===
+write throughput: 109 writes/s  (2000 writes in 18.33s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         7.96    13.12    25.83    29.89    31.01     9.11
+propagation ms     7.95    13.12    25.82    29.89    31.00     9.11
+
+=== etcd3-w16 (127.0.0.1:23791) ===
+write throughput: 475 writes/s  (2000 writes in 4.21s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms        32.76    46.94    52.88    60.87    61.20    33.14
+propagation ms    32.75    46.93    52.91    61.11    61.11    33.13
+
+=== etcd3-w64 (127.0.0.1:23791) ===
+write throughput: 1468 writes/s  (2000 writes in 1.36s, 64 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms        38.91    50.16    53.09    58.77    58.78    38.36
+propagation ms    38.94    50.14    53.12    58.76    58.76    38.33
+

@@ -1,0 +1,2 @@
+BARE-METAL xl170 CloudLab; client=node0 server=node1
+backends: REtcd(redis everysec) :2379  etcd :2389  kine+sqlite :2382

@@ -1,0 +1,56 @@
+=== retcd-w1 (node1:2379) ===
+write throughput: 1230 writes/s  (2000 writes in 1.63s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.81     0.91     1.14     1.49     1.58     0.81
+propagation ms     0.79     0.89     1.13     1.54     1.86     0.79
+
+=== retcd-w16 (node1:2379) ===
+write throughput: 9968 writes/s  (2000 writes in 0.20s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         1.52     2.27     3.23     6.98     7.76     1.57
+propagation ms     1.56     2.31     3.25     6.94     7.77     1.61
+
+=== retcd-w64 (node1:2379) ===
+write throughput: 13019 writes/s  (2000 writes in 0.15s, 64 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         4.08     5.31    24.74    27.90    27.92     4.59
+propagation ms     4.36     5.66    24.75    27.85    27.87     4.82
+
+=== etcd-w1 (node1:2389) ===
+write throughput: 1181 writes/s  (2000 writes in 1.69s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.83     0.94     1.30     1.75     2.00     0.85
+propagation ms     0.82     0.93     1.29     1.73     1.98     0.83
+
+=== etcd-w16 (node1:2389) ===
+write throughput: 14969 writes/s  (2000 writes in 0.13s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.96     1.54     2.27     2.67     2.77     1.05
+propagation ms     0.93     1.49     2.23     2.62     2.69     1.01
+
+=== etcd-w64 (node1:2389) ===
+write throughput: 23971 writes/s  (2000 writes in 0.08s, 64 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         2.16     3.57     4.63     5.01     5.34     2.29
+propagation ms     2.12     3.47     4.58     4.98     5.26     2.25
+
+=== kine-sqlite-w1 (node1:2382) ===
+write throughput: 378 writes/s  (2000 writes in 5.29s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         2.50     3.63     4.90     5.16     5.25     2.66
+propagation ms     2.78     4.00     5.28     5.66     6.00     2.96
+
+=== kine-sqlite-w16 (node1:2382) ===
+txn error (last of possibly many): rpc error: code = Unknown desc = database is locked
+write throughput: 50 writes/s  (2000 writes in 39.76s, 16 writers)
+measured writes: 1900   propagated: 1897   missed: 3 (0.16%)
+txn RTT ms        12.19   936.59  3737.14  5010.56  5011.08   284.22
+propagation ms   117.01  2044.04  4014.52  5790.75  6612.76   596.55
+
+=== kine-sqlite-w64 (node1:2382) ===
+txn error (last of possibly many): rpc error: code = Unknown desc = database is locked
+write throughput: 25 writes/s  (2000 writes in 79.29s, 64 writers)
+measured writes: 1900   propagated: 1598   missed: 302 (15.89%)
+txn RTT ms      1537.33  5030.28  8944.21 10015.02 10015.45  2280.53
+propagation ms  2940.18  7550.71 12848.10 15129.99 18565.05  3497.42
+

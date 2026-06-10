@@ -1,0 +1,1 @@
+BARE-METAL xl170 dm-delay write-latency sweep; single writer; count=1000

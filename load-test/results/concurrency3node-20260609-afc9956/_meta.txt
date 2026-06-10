@@ -1,0 +1,4 @@
+3-node etcd Raft cluster (etcd 3.6.10), LOCAL loopback peers
+CAVEAT: loopback peers => understates real inter-node consensus RTT; macOS fsync-slow.
+        Treat as a LOWER BOUND on the HA/Raft cost. Mirrors concurrency-afc9956 flags.
+REtcd HEAD=afc9956

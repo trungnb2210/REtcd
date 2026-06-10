@@ -1,0 +1,31 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  # Start from golangci-lint's default set (errcheck, govet, ineffassign,
+  # staticcheck, unused) and add a few high-signal extras.
+  enable:
+    - misspell    # common spelling mistakes in comments/strings
+    - unconvert   # unnecessary type conversions
+    - bodyclose   # HTTP response bodies that are never closed
+    - revive      # golint successor: naming/style/exported-doc checks
+  settings:
+    revive:
+      rules:
+        - name: exported          # exported symbols should have doc comments
+        - name: var-naming        # Go naming conventions (ID, URL, ...)
+        - name: indent-error-flow
+  exclusions:
+    # Generated protobuf and test files don't need the full treatment.
+    rules:
+      - path: _test\.go
+        linters:
+          - errcheck
+          - revive
+
+formatters:
+  enable:
+    - gofmt
+    - goimports

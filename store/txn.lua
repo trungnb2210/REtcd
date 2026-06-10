@@ -43,6 +43,7 @@ end
 
 -- Fetch global revision upfront so we can return it on compare failure.
 local cur_global_rev_num = tonumber(redis.call('GET', KEYS[2]) or '0') or 0
+-- we do clamp it to >= 1 as etcd clients treat revision 0 as 'no data'
 if cur_global_rev_num < 1 then cur_global_rev_num = 1 end
 local cur_global_rev = tostring(cur_global_rev_num)
 
@@ -100,7 +101,7 @@ else
             'key',       etcd_key,
             'rev',       tostring(new_rev),
             'data',      new_blob,
-            'prev_data', current_raw)
+            'prev_data', current_raw) -- if previous key exists, return prevKV
     else
         sid = redis.call('XADD', KEYS[3], '*',
             'type', 'PUT',

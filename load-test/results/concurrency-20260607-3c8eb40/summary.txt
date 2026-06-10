@@ -1,0 +1,74 @@
+=== retcd-w1 (localhost:2379) ===
+write throughput: 3470 writes/s  (2000 writes in 0.58s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.28     0.31     0.41     1.08     1.22     0.28
+propagation ms     0.28     0.31     0.40     1.08     1.22     0.28
+
+=== retcd-w16 (localhost:2379) ===
+write throughput: 18238 writes/s  (2000 writes in 0.11s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.85     1.07     2.58     4.30     4.30     0.87
+propagation ms     0.89     1.09     2.86     4.37     4.38     0.89
+
+=== retcd-w64 (localhost:2379) ===
+write throughput: 17257 writes/s  (2000 writes in 0.12s, 64 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         3.19     3.97    10.87    11.54    11.60     3.48
+propagation ms     3.47     4.29    11.01    11.67    11.68     3.69
+
+=== etcd-w1 (localhost:2389) ===
+write throughput: 230 writes/s  (2000 writes in 8.71s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         4.00     4.06    14.00    14.09    16.04     4.35
+propagation ms     4.00     4.06    14.00    14.09    16.03     4.35
+
+=== etcd-w16 (localhost:2389) ===
+write throughput: 1769 writes/s  (2000 writes in 1.13s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         8.00     9.67    22.38    26.06    26.06     8.99
+propagation ms     7.99     9.68    22.37    26.06    26.06     8.98
+
+=== etcd-w64 (localhost:2389) ===
+write throughput: 5875 writes/s  (2000 writes in 0.34s, 64 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         8.00     9.25    22.03    22.15    22.20     8.88
+propagation ms     7.99     9.17    22.02    22.15    22.18     8.86
+
+=== kine-sqlite-w1 (localhost:2382) ===
+write throughput: 2380 writes/s  (2000 writes in 0.84s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.42     0.48     0.56     0.66     0.67     0.42
+propagation ms     0.45     0.52     0.60     0.69     0.72     0.45
+
+=== kine-sqlite-w16 (localhost:2382) ===
+write throughput: 239 writes/s  (2000 writes in 8.36s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.61    19.50  1314.77  3975.54  4182.67    52.11
+propagation ms     0.66   149.65  1314.79  3975.54  4182.72    64.72
+
+=== kine-sqlite-w64 (localhost:2382) ===
+txn error (last of possibly many): rpc error: code = Unknown desc = database is locked
+write throughput: 86 writes/s  (2000 writes in 23.20s, 64 writers)
+measured writes: 1900   propagated: 1839   missed: 61 (3.21%)
+txn RTT ms         0.78  2730.57  5243.47  8049.23  9236.72   579.72
+propagation ms   187.71  2536.81  6239.93  9569.84  9940.91   946.56
+
+=== kine-pg-w1 (localhost:2383) ===
+write throughput: 1870 writes/s  (2000 writes in 1.07s, 1 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         0.52     0.59     0.74     0.85     0.87     0.53
+propagation ms     0.74     0.84     0.98     1.10     1.10     0.75
+
+=== kine-pg-w16 (localhost:2383) ===
+write throughput: 2647 writes/s  (2000 writes in 0.76s, 16 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms         3.55    10.66    15.65    21.14    24.13     5.84
+propagation ms     7.36    13.48    19.23    27.67    29.24     7.86
+
+=== kine-pg-w64 (localhost:2383) ===
+write throughput: 2108 writes/s  (2000 writes in 0.95s, 64 writers)
+measured writes: 1900   propagated: 1900   missed: 0 (0.00%)
+txn RTT ms        27.17    43.95   125.69   152.47   170.00    28.29
+propagation ms    36.22    64.91   165.72   186.43   197.81    39.90
+
+DONE -> load-test/results/concurrency-20260607-3c8eb40

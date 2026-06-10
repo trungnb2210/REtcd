@@ -1,0 +1,60 @@
+=== retcd-steady (node1:2379) ===
+write throughput: 46 writes/s  (3000 writes in 65.84s, 1 writers)
+measured writes: 2900   propagated: 2900   missed: 0 (0.00%)
+txn RTT ms         0.96     1.03     1.23     1.89     2.95     0.95
+propagation ms     0.94     1.00     1.22     1.86     2.96     0.93
+
+=== etcd-steady (node1:2389) ===
+write throughput: 47 writes/s  (3000 writes in 63.94s, 1 writers)
+measured writes: 2900   propagated: 2900   missed: 0 (0.00%)
+txn RTT ms         0.98     1.07     1.35     1.69     2.04     0.99
+propagation ms     0.96     1.04     1.32     1.66     2.02     0.97
+
+=== retcd-burst-w8 (node1:2379) ===
+write throughput: 10839 writes/s  (20000 writes in 1.85s, 8 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         0.67     1.04     1.52     1.98     5.09     0.73
+propagation ms     0.69     1.07     1.57     2.06     5.13     0.75
+
+=== etcd-burst-w8 (node1:2389) ===
+write throughput: 9573 writes/s  (20000 writes in 2.09s, 8 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         0.78     1.16     1.72     2.67     5.67     0.83
+propagation ms     0.74     1.11     1.66     2.64     5.65     0.80
+
+=== retcd-burst-w32 (node1:2379) ===
+write throughput: 13941 writes/s  (20000 writes in 1.43s, 32 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         2.25     3.06     3.87     7.02    11.54     2.27
+propagation ms     2.33     3.15     4.02     7.05    11.91     2.36
+
+=== etcd-burst-w32 (node1:2389) ===
+write throughput: 23510 writes/s  (20000 writes in 0.85s, 32 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         1.24     1.85     3.32    15.70    17.90     1.35
+propagation ms     1.20     1.81     3.27    15.63    17.92     1.31
+
+=== retcd-burst-w128 (node1:2379) ===
+write throughput: 16242 writes/s  (20000 writes in 1.23s, 128 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         7.30     8.65    14.79    70.82    72.42     7.73
+propagation ms     7.83     9.16    15.93    71.24    72.43     8.30
+
+=== etcd-burst-w128 (node1:2389) ===
+write throughput: 33312 writes/s  (20000 writes in 0.60s, 128 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         3.39     5.26     9.18    11.71    12.87     3.66
+propagation ms     3.37     5.26     9.12    11.65    12.89     3.64
+
+=== retcd-burst-w256 (node1:2379) ===
+write throughput: 16714 writes/s  (20000 writes in 1.20s, 256 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms        14.44    16.65    25.76    72.30    74.16    14.93
+propagation ms    15.61    17.98    27.02    73.24    75.21    16.05
+
+=== etcd-burst-w256 (node1:2389) ===
+write throughput: 37157 writes/s  (20000 writes in 0.54s, 256 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+txn RTT ms         6.24     9.38    17.03    19.09    19.85     6.49
+propagation ms     6.23     9.39    16.97    19.16    19.86     6.50
+

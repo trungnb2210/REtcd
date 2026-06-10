@@ -1,0 +1,1 @@
+BARE-METAL xl170 CloudLab; client=node0 server=node1

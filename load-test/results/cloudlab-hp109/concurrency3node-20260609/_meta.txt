@@ -1,0 +1,4 @@
+node3:23791 is healthy: successfully committed proposal: took = 4.226939ms
+node1:23791 is healthy: successfully committed proposal: took = 4.256771ms
+node2:23791 is healthy: successfully committed proposal: took = 4.26615ms
+BARE-METAL xl170 3-node Raft (real LAN RTT); endpoint=node1:23791

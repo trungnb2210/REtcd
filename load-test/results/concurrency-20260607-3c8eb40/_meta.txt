@@ -1,0 +1,4 @@
+REtcd HEAD=3c8eb40
+redis appendfsync=everysec
+kine version: kine version dev (HEAD)
+TESTBED: macOS (Darwin) — absolute numbers NOT comparable to CloudLab/Linux; relative cross-backend shape is valid

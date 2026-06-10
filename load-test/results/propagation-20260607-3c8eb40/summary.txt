@@ -1,0 +1,121 @@
+=== retcd-steady (localhost:2379) --rate 50 --count 3000 ===
+propbench: endpoint=localhost:2379 mode=steady 50/s rate=50/s count=3000 warmup=100
+
+=== localhost:2379 (steady 50/s) ===
+write throughput: 46 writes/s  (3000 writes in 65.80s, 1 writers)
+measured writes: 2900   propagated: 2900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         1.39     1.94     2.83     5.04     6.62     1.42
+propagation ms     1.39     1.94     2.83     5.04     6.62     1.42
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/retcd-steady.csv
+
+=== etcd-steady (localhost:2389) --rate 50 --count 3000 ===
+propbench: endpoint=localhost:2389 mode=steady 50/s rate=50/s count=3000 warmup=100
+
+=== localhost:2389 (steady 50/s) ===
+write throughput: 40 writes/s  (3000 writes in 75.59s, 1 writers)
+measured writes: 2900   propagated: 2900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         4.13     6.14    13.97    14.95    16.90     4.75
+propagation ms     4.13     6.14    13.96    14.94    16.90     4.75
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/etcd-steady.csv
+
+=== retcd-burst-w8 (localhost:2379) --burst --writers 8 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2379 mode=burst x8 rate=50/s count=20000 warmup=100
+
+=== localhost:2379 (burst x8) ===
+write throughput: 14244 writes/s  (20000 writes in 1.40s, 8 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         0.55     0.68     0.86     1.70     6.22     0.56
+propagation ms     0.56     0.70     0.87     1.69     6.24     0.57
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/retcd-burst-w8.csv
+
+=== etcd-burst-w8 (localhost:2389) --burst --writers 8 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2389 mode=burst x8 rate=50/s count=20000 warmup=100
+
+=== localhost:2389 (burst x8) ===
+write throughput: 910 writes/s  (20000 writes in 21.98s, 8 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         8.00     9.09    22.01    24.15    28.17     8.76
+propagation ms     7.99     9.09    22.00    24.14    28.19     8.76
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/etcd-burst-w8.csv
+
+=== retcd-burst-w32 (localhost:2379) --burst --writers 32 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2379 mode=burst x32 rate=50/s count=20000 warmup=100
+
+=== localhost:2379 (burst x32) ===
+write throughput: 26208 writes/s  (20000 writes in 0.76s, 32 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         1.16     1.58     2.05    10.08    10.95     1.21
+propagation ms     1.23     1.66     2.12    10.13    11.04     1.27
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/retcd-burst-w32.csv
+
+=== etcd-burst-w32 (localhost:2389) --burst --writers 32 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2389 mode=burst x32 rate=50/s count=20000 warmup=100
+
+=== localhost:2389 (burst x32) ===
+write throughput: 3582 writes/s  (20000 writes in 5.58s, 32 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         8.00     9.99    22.05    24.15    28.09     8.91
+propagation ms     8.00     9.98    22.04    24.14    28.08     8.91
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/etcd-burst-w32.csv
+
+=== retcd-burst-w128 (localhost:2379) --burst --writers 128 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2379 mode=burst x128 rate=50/s count=20000 warmup=100
+
+=== localhost:2379 (burst x128) ===
+write throughput: 20578 writes/s  (20000 writes in 0.97s, 128 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         5.85     7.29    12.50    63.54    74.38     6.07
+propagation ms     6.50     7.95    12.51    63.57    74.59     6.67
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/retcd-burst-w128.csv
+
+=== etcd-burst-w128 (localhost:2389) --burst --writers 128 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2389 mode=burst x128 rate=50/s count=20000 warmup=100
+
+=== localhost:2389 (burst x128) ===
+write throughput: 13117 writes/s  (20000 writes in 1.52s, 128 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         7.99     9.95    22.17    23.20    27.16     8.80
+propagation ms     7.98     9.99    22.15    23.82    27.18     8.79
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/etcd-burst-w128.csv
+
+=== retcd-burst-w256 (localhost:2379) --burst --writers 256 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2379 mode=burst x256 rate=50/s count=20000 warmup=100
+
+=== localhost:2379 (burst x256) ===
+write throughput: 32109 writes/s  (20000 writes in 0.62s, 256 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         7.98     9.09    14.06    18.06    22.67     7.69
+propagation ms     8.25     9.29    14.86    18.06    23.15     8.07
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/retcd-burst-w256.csv
+
+=== etcd-burst-w256 (localhost:2389) --burst --writers 256 --count 20000 --drain-s 30 ===
+propbench: endpoint=localhost:2389 mode=burst x256 rate=50/s count=20000 warmup=100
+
+=== localhost:2389 (burst x256) ===
+write throughput: 23208 writes/s  (20000 writes in 0.86s, 256 writers)
+measured writes: 19900   propagated: 19900   missed: 0 (0.00%)
+metric              p50      p90      p99    p99.9      max     mean
+txn RTT ms         8.01    11.54    24.94    27.39    28.13     9.14
+propagation ms     7.99    11.53    25.12    27.36    28.09     9.12
+
+per-write CSV: load-test/results/propagation-20260607-3c8eb40/etcd-burst-w256.csv
+
+DONE -> load-test/results/propagation-20260607-3c8eb40

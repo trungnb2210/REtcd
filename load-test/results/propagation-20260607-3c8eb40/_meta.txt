@@ -1,0 +1,3 @@
+REtcd HEAD=3c8eb40  out=load-test/results/propagation-20260607-3c8eb40
+redis appendfsync=everysec
+etcd Version: 3.6.10

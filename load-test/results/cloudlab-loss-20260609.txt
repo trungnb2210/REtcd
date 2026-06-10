@@ -1,0 +1,8 @@
+Bare-metal xl170 (CloudLab), crash-while-writing power-loss (SysRq-b, no sync).
+lossbench Txn-create, acks recorded off-host on client node0; recover from on-disk log.
+
+REtcd everysec  : acked=17683  recovered=16633  lost=1050  (5.9%)  ~6s run
+etcd (per-commit): acked=12730  recovered=12730  lost=0     (0%)   ~5s run
+
+Conclusion: etcd loses 0 acknowledged writes (durability-on-ack via per-commit WAL fsync);
+REtcd everysec loses one (partial) fsync window. Confirms VM run-length sweep on bare metal.
