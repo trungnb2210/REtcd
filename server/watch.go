@@ -130,10 +130,27 @@ func (s *WatchServer) Watch(stream pb.Watch_WatchServer) error {
 				WatchId:  cr.WatchId,
 			})
 		}
+
+		if msg.GetProgressRequest() != nil {
+			// etcd answers an on-demand progress request with an immediate
+			// empty response on watch ID -1, covering the whole stream. The
+			// apiserver's watch-cache freshness check (consistent
+			// list-from-cache) blocks on exactly this; without the reply it
+			// must wait out the periodic notification, up to progressInterval.
+			_ = sender.Send(&pb.WatchResponse{
+				Header:  &pb.ResponseHeader{ClusterId: 1, MemberId: 1, Revision: s.disp.currentRev()},
+				WatchId: invalidWatchID,
+			})
+		}
 	}
 }
 
 const (
+	// invalidWatchID stamps stream-wide progress replies, mirroring etcd's
+	// clientv3.InvalidWatchID: clients broadcast such responses to every
+	// watcher on the stream rather than routing them to one watch.
+	invalidWatchID = -1
+
 	progressInterval = 1 * time.Second
 	// maxSendBatch caps how many fanned-out events are coalesced into a single
 	// WatchResponse. Batching bursts into one gRPC Send is what keeps delivery

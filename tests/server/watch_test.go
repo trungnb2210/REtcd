@@ -182,3 +182,49 @@ func TestWatchDeliversWriteAfterCreate(t *testing.T) {
 		t.Fatal("write after watch-create was not delivered (sink→ingest wiring broken)")
 	}
 }
+
+// An on-demand progress request must be answered immediately (etcd semantics:
+// one empty response on watch ID -1, stamped with the current revision), not
+// left to the periodic 1 s notification. The apiserver's watch-cache freshness
+// check blocks on this reply.
+func TestWatchProgressRequestAnsweredImmediately(t *testing.T) {
+	fs := newFakeStore()
+	fs.rev = 7
+
+	ws := server.NewWatchServer(fs)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	stream := newMockWatchStream(ctx)
+	stream.recvCh <- watchCreateReq("foo", 0)
+	go func() { _ = ws.Watch(stream) }()
+
+	if !waitFor(stream.sawCreated, 2*time.Second) {
+		t.Fatal("watch was never created")
+	}
+
+	stream.recvCh <- &pb.WatchRequest{
+		RequestUnion: &pb.WatchRequest_ProgressRequest{
+			ProgressRequest: &pb.WatchProgressRequest{},
+		},
+	}
+
+	sawProgress := func() bool {
+		stream.mu.Lock()
+		defer stream.mu.Unlock()
+		for _, r := range stream.sent {
+			if r.WatchId == -1 && len(r.Events) == 0 && !r.Created && !r.Canceled {
+				if r.Header == nil || r.Header.Revision < 7 {
+					t.Fatalf("progress reply with stale/missing revision: %+v", r.Header)
+				}
+				return true
+			}
+		}
+		return false
+	}
+	// Well under progressInterval (1 s): the reply must come from the
+	// on-demand path, not the periodic ticker.
+	if !waitFor(sawProgress, 500*time.Millisecond) {
+		t.Fatal("progress request was not answered with a WatchId=-1 progress notification")
+	}
+}
