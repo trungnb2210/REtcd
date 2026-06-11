@@ -1,0 +1,18 @@
+=== retcd-w0 ===
+bringup_s=46.0
+cell done rc=0
+=== etcd-w0 ===
+bringup_s=50.4
+cell done rc=0
+=== sqlite-w0 ===
+bringup_s=46.3
+cell done rc=0
+=== retcd-w20 ===
+bringup_s=51.9
+cell done rc=0
+=== etcd-w20 ===
+bringup_s=59.5
+cell done rc=0
+=== sqlite-w20 ===
+bringup_s=48.5
+cell done rc=0

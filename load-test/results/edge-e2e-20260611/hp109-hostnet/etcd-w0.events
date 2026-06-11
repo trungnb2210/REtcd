@@ -1,0 +1,1019 @@
+LAST SEEN   TYPE      REASON              OBJECT                        MESSAGE
+6s          Normal    Scheduled           pod/churn-77b65bf587-x9lq8    Successfully assigned bench/churn-77b65bf587-x9lq8 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-nz4hm    Successfully assigned bench/churn-77b65bf587-nz4hm to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-bwllt    Successfully assigned bench/churn-77b65bf587-bwllt to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-27fv7    Successfully assigned bench/churn-77b65bf587-27fv7 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-lnlt5    Successfully assigned bench/churn-77b65bf587-lnlt5 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-286z8    Successfully assigned bench/churn-77b65bf587-286z8 to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-lr8xf    Successfully assigned bench/churn-77b65bf587-lr8xf to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-bvz6v    Successfully assigned bench/churn-77b65bf587-bvz6v to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-rp8fw    Successfully assigned bench/churn-77b65bf587-rp8fw to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-rcjmf    Successfully assigned bench/churn-77b65bf587-rcjmf to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-2drtm    Successfully assigned bench/churn-77b65bf587-2drtm to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-rb8cb    Successfully assigned bench/churn-77b65bf587-rb8cb to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-rwr2x    Successfully assigned bench/churn-77b65bf587-rwr2x to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-r9xdz    Successfully assigned bench/churn-77b65bf587-r9xdz to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-gtzps    Successfully assigned bench/churn-77b65bf587-gtzps to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-2rc6d    Successfully assigned bench/churn-77b65bf587-2rc6d to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-b2ww7    Successfully assigned bench/churn-77b65bf587-b2ww7 to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-xbffj    Successfully assigned bench/churn-77b65bf587-xbffj to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-bwlvv    Successfully assigned bench/churn-77b65bf587-bwlvv to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-c2gnp    Successfully assigned bench/churn-77b65bf587-c2gnp to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-2z747    Successfully assigned bench/churn-77b65bf587-2z747 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-ghw8w    Successfully assigned bench/churn-77b65bf587-ghw8w to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-h5q4s    Successfully assigned bench/churn-77b65bf587-h5q4s to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-gg28x    Successfully assigned bench/churn-77b65bf587-gg28x to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-9zqg2    Successfully assigned bench/churn-77b65bf587-9zqg2 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-4fghg    Successfully assigned bench/churn-77b65bf587-4fghg to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-gcv52    Successfully assigned bench/churn-77b65bf587-gcv52 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-c5mh4    Successfully assigned bench/churn-77b65bf587-c5mh4 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-ls2fd    Successfully assigned bench/churn-77b65bf587-ls2fd to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-w9jw9    Successfully assigned bench/churn-77b65bf587-w9jw9 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-4xmzq    Successfully assigned bench/churn-77b65bf587-4xmzq to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-llfgx    Successfully assigned bench/churn-77b65bf587-llfgx to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-9vr7n    Successfully assigned bench/churn-77b65bf587-9vr7n to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-r86xb    Successfully assigned bench/churn-77b65bf587-r86xb to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-r6xwc    Successfully assigned bench/churn-77b65bf587-r6xwc to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-5c62g    Successfully assigned bench/churn-77b65bf587-5c62g to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-lvrrv    Successfully assigned bench/churn-77b65bf587-lvrrv to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-wmbjh    Successfully assigned bench/churn-77b65bf587-wmbjh to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-lbzqt    Successfully assigned bench/churn-77b65bf587-lbzqt to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-9nbcg    Successfully assigned bench/churn-77b65bf587-9nbcg to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-fxfwx    Successfully assigned bench/churn-77b65bf587-fxfwx to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-v7hqw    Successfully assigned bench/churn-77b65bf587-v7hqw to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-v8ggf    Successfully assigned bench/churn-77b65bf587-v8ggf to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-m8mq8    Successfully assigned bench/churn-77b65bf587-m8mq8 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-f9sk7    Successfully assigned bench/churn-77b65bf587-f9sk7 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-5dsbq    Successfully assigned bench/churn-77b65bf587-5dsbq to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-rz994    Successfully assigned bench/churn-77b65bf587-rz994 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-s6xd8    Successfully assigned bench/churn-77b65bf587-s6xd8 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-zwdc5    Successfully assigned bench/churn-77b65bf587-zwdc5 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-sptwv    Successfully assigned bench/churn-77b65bf587-sptwv to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-5k4cl    Successfully assigned bench/churn-77b65bf587-5k4cl to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-r4rt9    Successfully assigned bench/churn-77b65bf587-r4rt9 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-spvzd    Successfully assigned bench/churn-77b65bf587-spvzd to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-r2xp6    Successfully assigned bench/churn-77b65bf587-r2xp6 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-zrwqb    Successfully assigned bench/churn-77b65bf587-zrwqb to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-5mkx8    Successfully assigned bench/churn-77b65bf587-5mkx8 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-qwqrb    Successfully assigned bench/churn-77b65bf587-qwqrb to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-qqd44    Successfully assigned bench/churn-77b65bf587-qqd44 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-mbdth    Successfully assigned bench/churn-77b65bf587-mbdth to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-mfp9k    Successfully assigned bench/churn-77b65bf587-mfp9k to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-5nrks    Successfully assigned bench/churn-77b65bf587-5nrks to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-9m4ff    Successfully assigned bench/churn-77b65bf587-9m4ff to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-f87g9    Successfully assigned bench/churn-77b65bf587-f87g9 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-h6nf5    Successfully assigned bench/churn-77b65bf587-h6nf5 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-hdl7k    Successfully assigned bench/churn-77b65bf587-hdl7k to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-5r78h    Successfully assigned bench/churn-77b65bf587-5r78h to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-txwnb    Successfully assigned bench/churn-77b65bf587-txwnb to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-ttqc5    Successfully assigned bench/churn-77b65bf587-ttqc5 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-tsq4d    Successfully assigned bench/churn-77b65bf587-tsq4d to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-qq5h8    Successfully assigned bench/churn-77b65bf587-qq5h8 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-5rk85    Successfully assigned bench/churn-77b65bf587-5rk85 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-zq9ms    Successfully assigned bench/churn-77b65bf587-zq9ms to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-qj8fr    Successfully assigned bench/churn-77b65bf587-qj8fr to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-qbqpt    Successfully assigned bench/churn-77b65bf587-qbqpt to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-szk49    Successfully assigned bench/churn-77b65bf587-szk49 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-5rsrq    Successfully assigned bench/churn-77b65bf587-5rsrq to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-t2trl    Successfully assigned bench/churn-77b65bf587-t2trl to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-zbmx9    Successfully assigned bench/churn-77b65bf587-zbmx9 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-mglr4    Successfully assigned bench/churn-77b65bf587-mglr4 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-9kqmf    Successfully assigned bench/churn-77b65bf587-9kqmf to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-5vm25    Successfully assigned bench/churn-77b65bf587-5vm25 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-q9nj2    Successfully assigned bench/churn-77b65bf587-q9nj2 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-f6tqr    Successfully assigned bench/churn-77b65bf587-f6tqr to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-mnhpp    Successfully assigned bench/churn-77b65bf587-mnhpp to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-dxkk2    Successfully assigned bench/churn-77b65bf587-dxkk2 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-5wj9b    Successfully assigned bench/churn-77b65bf587-5wj9b to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-mwdsw    Successfully assigned bench/churn-77b65bf587-mwdsw to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-mxrv5    Successfully assigned bench/churn-77b65bf587-mxrv5 to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-hfz5h    Successfully assigned bench/churn-77b65bf587-hfz5h to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-dv6jc    Successfully assigned bench/churn-77b65bf587-dv6jc to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-64xt9    Successfully assigned bench/churn-77b65bf587-64xt9 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-9fprf    Successfully assigned bench/churn-77b65bf587-9fprf to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-cc5f5    Successfully assigned bench/churn-77b65bf587-cc5f5 to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-dt8wr    Successfully assigned bench/churn-77b65bf587-dt8wr to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-vmqdl    Successfully assigned bench/churn-77b65bf587-vmqdl to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-dr5kc    Successfully assigned bench/churn-77b65bf587-dr5kc to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-652ct    Successfully assigned bench/churn-77b65bf587-652ct to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-wnwh4    Successfully assigned bench/churn-77b65bf587-wnwh4 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-w7pz8    Successfully assigned bench/churn-77b65bf587-w7pz8 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-zbhcw    Successfully assigned bench/churn-77b65bf587-zbhcw to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-96zz4    Successfully assigned bench/churn-77b65bf587-96zz4 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-662pf    Successfully assigned bench/churn-77b65bf587-662pf to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-q77cd    Successfully assigned bench/churn-77b65bf587-q77cd to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-psrts    Successfully assigned bench/churn-77b65bf587-psrts to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-w7kcm    Successfully assigned bench/churn-77b65bf587-w7kcm to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-xdk69    Successfully assigned bench/churn-77b65bf587-xdk69 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-67lt6    Successfully assigned bench/churn-77b65bf587-67lt6 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-mz7gl    Successfully assigned bench/churn-77b65bf587-mz7gl to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-tqrq7    Successfully assigned bench/churn-77b65bf587-tqrq7 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-dlhtx    Successfully assigned bench/churn-77b65bf587-dlhtx to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-wszwk    Successfully assigned bench/churn-77b65bf587-wszwk to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-6ftp7    Successfully assigned bench/churn-77b65bf587-6ftp7 to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-dhc7r    Successfully assigned bench/churn-77b65bf587-dhc7r to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-922lg    Successfully assigned bench/churn-77b65bf587-922lg to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-n29cm    Successfully assigned bench/churn-77b65bf587-n29cm to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-8xtx9    Successfully assigned bench/churn-77b65bf587-8xtx9 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-6hjvl    Successfully assigned bench/churn-77b65bf587-6hjvl to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-w74h5    Successfully assigned bench/churn-77b65bf587-w74h5 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-ppgl8    Successfully assigned bench/churn-77b65bf587-ppgl8 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-ckb5x    Successfully assigned bench/churn-77b65bf587-ckb5x to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-dcg7p    Successfully assigned bench/churn-77b65bf587-dcg7p to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-6kxt9    Successfully assigned bench/churn-77b65bf587-6kxt9 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-dbnvh    Successfully assigned bench/churn-77b65bf587-dbnvh to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-l7cvt    Successfully assigned bench/churn-77b65bf587-l7cvt to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-l5mw8    Successfully assigned bench/churn-77b65bf587-l5mw8 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-8qqrs    Successfully assigned bench/churn-77b65bf587-8qqrs to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-6pl7z    Successfully assigned bench/churn-77b65bf587-6pl7z to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-clnj7    Successfully assigned bench/churn-77b65bf587-clnj7 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-l2s56    Successfully assigned bench/churn-77b65bf587-l2s56 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-p2b5b    Successfully assigned bench/churn-77b65bf587-p2b5b to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-8pvdc    Successfully assigned bench/churn-77b65bf587-8pvdc to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-6szlk    Successfully assigned bench/churn-77b65bf587-6szlk to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-p2vdg    Successfully assigned bench/churn-77b65bf587-p2vdg to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-tglsf    Successfully assigned bench/churn-77b65bf587-tglsf to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-ppcdl    Successfully assigned bench/churn-77b65bf587-ppcdl to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-p4jfd    Successfully assigned bench/churn-77b65bf587-p4jfd to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-6v8cf    Successfully assigned bench/churn-77b65bf587-6v8cf to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-db2kr    Successfully assigned bench/churn-77b65bf587-db2kr to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-p56gb    Successfully assigned bench/churn-77b65bf587-p56gb to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-d9tls    Successfully assigned bench/churn-77b65bf587-d9tls to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-pmjfv    Successfully assigned bench/churn-77b65bf587-pmjfv to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-6xwgh    Successfully assigned bench/churn-77b65bf587-6xwgh to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-vn5bz    Successfully assigned bench/churn-77b65bf587-vn5bz to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-pddf5    Successfully assigned bench/churn-77b65bf587-pddf5 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-czg9l    Successfully assigned bench/churn-77b65bf587-czg9l to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-w2jrf    Successfully assigned bench/churn-77b65bf587-w2jrf to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-72p8g    Successfully assigned bench/churn-77b65bf587-72p8g to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-cwnnh    Successfully assigned bench/churn-77b65bf587-cwnnh to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-hh8j9    Successfully assigned bench/churn-77b65bf587-hh8j9 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-hl9c2    Successfully assigned bench/churn-77b65bf587-hl9c2 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-hmwkl    Successfully assigned bench/churn-77b65bf587-hmwkl to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-7mncw    Successfully assigned bench/churn-77b65bf587-7mncw to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-8msc7    Successfully assigned bench/churn-77b65bf587-8msc7 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-cqdr5    Successfully assigned bench/churn-77b65bf587-cqdr5 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-kp7sg    Successfully assigned bench/churn-77b65bf587-kp7sg to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-pb4t6    Successfully assigned bench/churn-77b65bf587-pb4t6 to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-7rztb    Successfully assigned bench/churn-77b65bf587-7rztb to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-hqr6p    Successfully assigned bench/churn-77b65bf587-hqr6p to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-cvnmp    Successfully assigned bench/churn-77b65bf587-cvnmp to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-jfx67    Successfully assigned bench/churn-77b65bf587-jfx67 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-t4b8g    Successfully assigned bench/churn-77b65bf587-t4b8g to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-7w5m8    Successfully assigned bench/churn-77b65bf587-7w5m8 to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-jkdp7    Successfully assigned bench/churn-77b65bf587-jkdp7 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-k9hjf    Successfully assigned bench/churn-77b65bf587-k9hjf to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-p6s8g    Successfully assigned bench/churn-77b65bf587-p6s8g to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-t9swk    Successfully assigned bench/churn-77b65bf587-t9swk to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-828sh    Successfully assigned bench/churn-77b65bf587-828sh to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-v4zwc    Successfully assigned bench/churn-77b65bf587-v4zwc to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-p5t5w    Successfully assigned bench/churn-77b65bf587-p5t5w to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-tft5l    Successfully assigned bench/churn-77b65bf587-tft5l to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-wt5jv    Successfully assigned bench/churn-77b65bf587-wt5jv to bench
+34s         Normal    Scheduled           pod/churn-77b65bf587-87r9t    Successfully assigned bench/churn-77b65bf587-87r9t to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-cvh9n    Successfully assigned bench/churn-77b65bf587-cvh9n to bench
+13s         Normal    Scheduled           pod/churn-77b65bf587-tznkg    Successfully assigned bench/churn-77b65bf587-tznkg to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-jp5rd    Successfully assigned bench/churn-77b65bf587-jp5rd to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-tzjpg    Successfully assigned bench/churn-77b65bf587-tzjpg to bench
+54s         Normal    Scheduled           pod/churn-77b65bf587-8hms6    Successfully assigned bench/churn-77b65bf587-8hms6 to bench
+27s         Normal    Scheduled           pod/churn-77b65bf587-k4l62    Successfully assigned bench/churn-77b65bf587-k4l62 to bench
+6s          Normal    Scheduled           pod/churn-77b65bf587-csrj7    Successfully assigned bench/churn-77b65bf587-csrj7 to bench
+20s         Normal    Scheduled           pod/churn-77b65bf587-w57dx    Successfully assigned bench/churn-77b65bf587-w57dx to bench
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-xbffj
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-t2trl
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-gcv52
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-lr8xf
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-64xt9
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-dxkk2
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-fxfwx
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-dhc7r
+55s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   Created pod: churn-77b65bf587-dt8wr
+54s         Normal    Pulling             pod/churn-77b65bf587-dcg7p    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-t2trl    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-ppcdl    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-t2trl    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-gtzps    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-d9tls    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-xbffj    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-hfz5h    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-hfz5h    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-hfz5h    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-8hms6    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-dcg7p    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-xbffj    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-n29cm    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-n29cm    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-n29cm    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-xbffj    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-dcg7p    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-dhc7r    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-mxrv5    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-vmqdl    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-vmqdl    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-q77cd    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-q77cd    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-v4zwc    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-txwnb    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-dt8wr    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-64xt9    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-vmqdl    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-bwllt    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-q77cd    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-dxkk2    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-t2trl    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-ppcdl    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-qq5h8    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-qq5h8    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-qq5h8    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-f87g9    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-txwnb    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-f87g9    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-f87g9    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-v8ggf    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-fxfwx    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-txwnb    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-5c62g    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-5c62g    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-5c62g    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-pb4t6    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-pb4t6    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-r86xb    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-r86xb    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-r86xb    Error: ErrImagePull
+54s         Normal    Pulling             pod/churn-77b65bf587-gcv52    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-c2gnp    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-pb4t6    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-llfgx    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-v4zwc    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-v4zwc    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-bwllt    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-lr8xf    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-lr8xf    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-lr8xf    Pulling image "registry.k8s.io/pause:3.9"
+54s         Normal    Pulling             pod/churn-77b65bf587-gtzps    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-gtzps    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Normal    Pulling             pod/churn-77b65bf587-8hms6    Pulling image "registry.k8s.io/pause:3.9"
+54s         Warning   Failed              pod/churn-77b65bf587-ppcdl    Error: ErrImagePull
+54s         Warning   Failed              pod/churn-77b65bf587-bwllt    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+54s         Warning   Failed              pod/churn-77b65bf587-8hms6    Failed to pull image "registry.k8s.io/pause:3.9": pull QPS exceeded
+53s         Warning   Failed              pod/churn-77b65bf587-hfz5h    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-dcg7p    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-lr8xf    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-bwllt    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-bwllt    Error: ImagePullBackOff
+53s         Warning   Failed              pod/churn-77b65bf587-gtzps    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-gtzps    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    SuccessfulCreate    replicaset/churn-77b65bf587   (combined from similar events): Created pod: churn-77b65bf587-dcg7p
+53s         Warning   Failed              pod/churn-77b65bf587-r86xb    Error: ImagePullBackOff
+53s         Warning   Failed              pod/churn-77b65bf587-lr8xf    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-r86xb    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-5c62g    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-5c62g    Error: ImagePullBackOff
+53s         Warning   Failed              pod/churn-77b65bf587-f87g9    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-f87g9    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-qq5h8    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-qq5h8    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-v4zwc    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-v4zwc    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-q77cd    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-q77cd    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-vmqdl    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-xbffj    Error: ImagePullBackOff
+53s         Warning   Failed              pod/churn-77b65bf587-dcg7p    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-xbffj    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-vmqdl    Error: ImagePullBackOff
+53s         Warning   Failed              pod/churn-77b65bf587-ppcdl    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-ppcdl    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-hfz5h    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-n29cm    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-n29cm    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-txwnb    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-txwnb    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-t2trl    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-t2trl    Error: ImagePullBackOff
+53s         Warning   Failed              pod/churn-77b65bf587-pb4t6    Error: ImagePullBackOff
+53s         Normal    BackOff             pod/churn-77b65bf587-pb4t6    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Normal    BackOff             pod/churn-77b65bf587-8hms6    Back-off pulling image "registry.k8s.io/pause:3.9"
+53s         Warning   Failed              pod/churn-77b65bf587-8hms6    Error: ImagePullBackOff
+52s         Normal    Created             pod/churn-77b65bf587-dt8wr    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-dhc7r    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.768s (1.768s including waiting). Image size: 321520 bytes.
+52s         Normal    Started             pod/churn-77b65bf587-gcv52    Started container p
+52s         Normal    Created             pod/churn-77b65bf587-dhc7r    Created container: p
+52s         Normal    Started             pod/churn-77b65bf587-dhc7r    Started container p
+52s         Normal    Started             pod/churn-77b65bf587-64xt9    Started container p
+52s         Normal    Created             pod/churn-77b65bf587-dxkk2    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-gcv52    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.774s (1.774s including waiting). Image size: 321520 bytes.
+52s         Normal    Started             pod/churn-77b65bf587-llfgx    Started container p
+52s         Normal    Started             pod/churn-77b65bf587-fxfwx    Started container p
+52s         Normal    Created             pod/churn-77b65bf587-fxfwx    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-fxfwx    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.753s (1.753s including waiting). Image size: 321520 bytes.
+52s         Normal    Created             pod/churn-77b65bf587-llfgx    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-llfgx    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.694s (1.694s including waiting). Image size: 321520 bytes.
+52s         Normal    Started             pod/churn-77b65bf587-v8ggf    Started container p
+52s         Normal    Created             pod/churn-77b65bf587-v8ggf    Created container: p
+52s         Normal    Created             pod/churn-77b65bf587-64xt9    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-64xt9    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.706s (1.706s including waiting). Image size: 321520 bytes.
+52s         Normal    Pulled              pod/churn-77b65bf587-mxrv5    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.699s (1.699s including waiting). Image size: 321520 bytes.
+52s         Normal    Pulled              pod/churn-77b65bf587-dxkk2    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.742s (1.742s including waiting). Image size: 321520 bytes.
+52s         Normal    Pulled              pod/churn-77b65bf587-dt8wr    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.791s (1.791s including waiting). Image size: 321520 bytes.
+52s         Normal    Started             pod/churn-77b65bf587-dt8wr    Started container p
+52s         Normal    Created             pod/churn-77b65bf587-mxrv5    Created container: p
+52s         Normal    Started             pod/churn-77b65bf587-mxrv5    Started container p
+52s         Normal    Started             pod/churn-77b65bf587-c2gnp    Started container p
+52s         Normal    Pulled              pod/churn-77b65bf587-c2gnp    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.706s (1.706s including waiting). Image size: 321520 bytes.
+52s         Normal    Created             pod/churn-77b65bf587-c2gnp    Created container: p
+52s         Normal    Started             pod/churn-77b65bf587-d9tls    Started container p
+52s         Normal    Started             pod/churn-77b65bf587-dxkk2    Started container p
+52s         Normal    Created             pod/churn-77b65bf587-gcv52    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-v8ggf    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.602s (1.602s including waiting). Image size: 321520 bytes.
+52s         Normal    Created             pod/churn-77b65bf587-d9tls    Created container: p
+52s         Normal    Pulled              pod/churn-77b65bf587-d9tls    Successfully pulled image "registry.k8s.io/pause:3.9" in 1.707s (1.707s including waiting). Image size: 321520 bytes.
+43s         Normal    Pulled              pod/churn-77b65bf587-q77cd    Container image "registry.k8s.io/pause:3.9" already present on machine
+43s         Normal    Pulled              pod/churn-77b65bf587-8hms6    Container image "registry.k8s.io/pause:3.9" already present on machine
+43s         Normal    Pulled              pod/churn-77b65bf587-5c62g    Container image "registry.k8s.io/pause:3.9" already present on machine
+43s         Normal    Pulled              pod/churn-77b65bf587-t2trl    Container image "registry.k8s.io/pause:3.9" already present on machine
+42s         Normal    Started             pod/churn-77b65bf587-5c62g    Started container p
+42s         Normal    Created             pod/churn-77b65bf587-t2trl    Created container: p
+42s         Normal    Started             pod/churn-77b65bf587-q77cd    Started container p
+42s         Normal    Started             pod/churn-77b65bf587-8hms6    Started container p
+42s         Normal    Pulled              pod/churn-77b65bf587-dcg7p    Container image "registry.k8s.io/pause:3.9" already present on machine
+42s         Normal    Created             pod/churn-77b65bf587-8hms6    Created container: p
+42s         Normal    Created             pod/churn-77b65bf587-5c62g    Created container: p
+42s         Normal    Started             pod/churn-77b65bf587-t2trl    Started container p
+42s         Normal    Created             pod/churn-77b65bf587-q77cd    Created container: p
+42s         Normal    Pulled              pod/churn-77b65bf587-qq5h8    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Created             pod/churn-77b65bf587-qq5h8    Created container: p
+41s         Normal    Pulled              pod/churn-77b65bf587-vmqdl    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Pulled              pod/churn-77b65bf587-bwllt    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Pulled              pod/churn-77b65bf587-hfz5h    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Pulled              pod/churn-77b65bf587-f87g9    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Pulled              pod/churn-77b65bf587-lr8xf    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Pulled              pod/churn-77b65bf587-ppcdl    Container image "registry.k8s.io/pause:3.9" already present on machine
+41s         Normal    Created             pod/churn-77b65bf587-dcg7p    Created container: p
+41s         Normal    Started             pod/churn-77b65bf587-dcg7p    Started container p
+41s         Normal    Started             pod/churn-77b65bf587-qq5h8    Started container p
+40s         Normal    Created             pod/churn-77b65bf587-f87g9    Created container: p
+40s         Normal    Started             pod/churn-77b65bf587-ppcdl    Started container p
+40s         Normal    Created             pod/churn-77b65bf587-bwllt    Created container: p
+40s         Normal    Started             pod/churn-77b65bf587-bwllt    Started container p
+40s         Normal    Pulled              pod/churn-77b65bf587-v4zwc    Container image "registry.k8s.io/pause:3.9" already present on machine
+40s         Normal    Started             pod/churn-77b65bf587-lr8xf    Started container p
+40s         Normal    Started             pod/churn-77b65bf587-hfz5h    Started container p
+40s         Normal    Created             pod/churn-77b65bf587-lr8xf    Created container: p
+40s         Normal    Pulled              pod/churn-77b65bf587-n29cm    Container image "registry.k8s.io/pause:3.9" already present on machine
+40s         Normal    Created             pod/churn-77b65bf587-hfz5h    Created container: p
+40s         Normal    Started             pod/churn-77b65bf587-f87g9    Started container p
+40s         Normal    Pulled              pod/churn-77b65bf587-xbffj    Container image "registry.k8s.io/pause:3.9" already present on machine
+40s         Normal    Created             pod/churn-77b65bf587-ppcdl    Created container: p
+40s         Normal    Pulled              pod/churn-77b65bf587-r86xb    Container image "registry.k8s.io/pause:3.9" already present on machine
+40s         Normal    Started             pod/churn-77b65bf587-vmqdl    Started container p
+40s         Normal    Created             pod/churn-77b65bf587-vmqdl    Created container: p
+39s         Normal    Started             pod/churn-77b65bf587-r86xb    Started container p
+39s         Normal    Started             pod/churn-77b65bf587-v4zwc    Started container p
+39s         Normal    Pulled              pod/churn-77b65bf587-txwnb    Container image "registry.k8s.io/pause:3.9" already present on machine
+39s         Normal    Created             pod/churn-77b65bf587-v4zwc    Created container: p
+39s         Normal    Created             pod/churn-77b65bf587-r86xb    Created container: p
+39s         Normal    Pulled              pod/churn-77b65bf587-gtzps    Container image "registry.k8s.io/pause:3.9" already present on machine
+39s         Normal    Created             pod/churn-77b65bf587-xbffj    Created container: p
+39s         Normal    Created             pod/churn-77b65bf587-n29cm    Created container: p
+39s         Normal    Pulled              pod/churn-77b65bf587-pb4t6    Container image "registry.k8s.io/pause:3.9" already present on machine
+39s         Normal    Started             pod/churn-77b65bf587-n29cm    Started container p
+39s         Normal    Started             pod/churn-77b65bf587-xbffj    Started container p
+38s         Normal    Created             pod/churn-77b65bf587-pb4t6    Created container: p
+38s         Normal    Started             pod/churn-77b65bf587-txwnb    Started container p
+38s         Normal    Started             pod/churn-77b65bf587-pb4t6    Started container p
+38s         Normal    Created             pod/churn-77b65bf587-gtzps    Created container: p
+38s         Normal    Started             pod/churn-77b65bf587-gtzps    Started container p
+38s         Normal    Created             pod/churn-77b65bf587-txwnb    Created container: p
+37s         Normal    Killing             pod/churn-77b65bf587-dt8wr    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-gtzps    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-q77cd    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-8hms6    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-dxkk2    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-dcg7p    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-vmqdl    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-hfz5h    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-qq5h8    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-d9tls    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-r86xb    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-mxrv5    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-c2gnp    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-lr8xf    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-f87g9    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-5c62g    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-ppcdl    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-n29cm    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-t2trl    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-dhc7r    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-v4zwc    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-xbffj    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-64xt9    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-pb4t6    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-llfgx    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-fxfwx    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-v8ggf    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-bwllt    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-gcv52    Stopping container p
+37s         Normal    Killing             pod/churn-77b65bf587-txwnb    Stopping container p
+34s         Normal    Created             pod/churn-77b65bf587-7w5m8    Created container: p
+34s         Normal    Created             pod/churn-77b65bf587-tft5l    Created container: p
+34s         Normal    Pulled              pod/churn-77b65bf587-ls2fd    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-7w5m8    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Created             pod/churn-77b65bf587-87r9t    Created container: p
+34s         Normal    Pulled              pod/churn-77b65bf587-87r9t    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Created             pod/churn-77b65bf587-ppgl8    Created container: p
+34s         Normal    Pulled              pod/churn-77b65bf587-t9swk    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-h6nf5    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-ppgl8    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-tft5l    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-wmbjh    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-5wj9b    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Created             pod/churn-77b65bf587-286z8    Created container: p
+34s         Normal    Pulled              pod/churn-77b65bf587-286z8    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Pulled              pod/churn-77b65bf587-6xwgh    Container image "registry.k8s.io/pause:3.9" already present on machine
+34s         Normal    Created             pod/churn-77b65bf587-ls2fd    Created container: p
+34s         Normal    Created             pod/churn-77b65bf587-wmbjh    Created container: p
+33s         Normal    Created             pod/churn-77b65bf587-tqrq7    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-mwdsw    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-286z8    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-9vr7n    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-9vr7n    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-rb8cb    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-rb8cb    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-rb8cb    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Pulled              pod/churn-77b65bf587-2drtm    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-2drtm    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-2drtm    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-h6nf5    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-h6nf5    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-9vr7n    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Started             pod/churn-77b65bf587-lbzqt    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-lbzqt    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-zrwqb    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-zrwqb    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-zrwqb    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Pulled              pod/churn-77b65bf587-5mkx8    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Pulled              pod/churn-77b65bf587-lbzqt    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Started             pod/churn-77b65bf587-qqd44    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-qqd44    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-qqd44    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-5mkx8    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-5mkx8    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-ls2fd    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-5wj9b    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-5wj9b    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-9m4ff    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-mbdth    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-mbdth    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-ppgl8    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-6xwgh    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-cvnmp    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-6xwgh    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-mbdth    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-72p8g    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-72p8g    Created container: p
+33s         Normal    Created             pod/churn-77b65bf587-cvnmp    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-72p8g    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-9m4ff    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-7rztb    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-7rztb    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-cvnmp    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Pulled              pod/churn-77b65bf587-hqr6p    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-hqr6p    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-hqr6p    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-9m4ff    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Started             pod/churn-77b65bf587-7rztb    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-tqrq7    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-7w5m8    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-tqrq7    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-t9swk    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-t9swk    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-9fprf    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-87r9t    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-mwdsw    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Started             pod/churn-77b65bf587-tft5l    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-mwdsw    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-8pvdc    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-9fprf    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-nz4hm    Started container p
+33s         Normal    Created             pod/churn-77b65bf587-nz4hm    Created container: p
+33s         Normal    Pulled              pod/churn-77b65bf587-nz4hm    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-8pvdc    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-8pvdc    Started container p
+33s         Normal    Pulled              pod/churn-77b65bf587-9fprf    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Pulled              pod/churn-77b65bf587-8xtx9    Container image "registry.k8s.io/pause:3.9" already present on machine
+33s         Normal    Created             pod/churn-77b65bf587-8xtx9    Created container: p
+33s         Normal    Started             pod/churn-77b65bf587-8xtx9    Started container p
+33s         Normal    Started             pod/churn-77b65bf587-wmbjh    Started container p
+32s         Normal    Killing             pod/churn-77b65bf587-72p8g    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-8pvdc    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-mbdth    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-nz4hm    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-mwdsw    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-9vr7n    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-tft5l    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-87r9t    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-t9swk    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-9fprf    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-7w5m8    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-7rztb    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-tqrq7    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-hqr6p    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-286z8    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-8xtx9    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-6xwgh    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-ppgl8    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-5wj9b    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-cvnmp    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-9m4ff    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-ls2fd    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-5mkx8    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-qqd44    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-rb8cb    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-2drtm    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-lbzqt    Stopping container p
+32s         Normal    Killing             pod/churn-77b65bf587-h6nf5    Stopping container p
+31s         Normal    Killing             pod/churn-77b65bf587-zrwqb    Stopping container p
+31s         Normal    Killing             pod/churn-77b65bf587-wmbjh    Stopping container p
+27s         Normal    Created             pod/churn-77b65bf587-l5mw8    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-zbmx9    Started container p
+27s         Normal    Created             pod/churn-77b65bf587-gg28x    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-lnlt5    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-lnlt5    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-gg28x    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-rp8fw    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-b2ww7    Started container p
+27s         Normal    Created             pod/churn-77b65bf587-b2ww7    Created container: p
+27s         Normal    Created             pod/churn-77b65bf587-w2jrf    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-b2ww7    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-wt5jv    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-wt5jv    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-jfx67    Started container p
+27s         Normal    Created             pod/churn-77b65bf587-f6tqr    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-2z747    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-2z747    Created container: p
+27s         Normal    Created             pod/churn-77b65bf587-tzjpg    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-4fghg    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-4fghg    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-tzjpg    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-jfx67    Created container: p
+27s         Normal    Created             pod/churn-77b65bf587-w7pz8    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-rwr2x    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-rwr2x    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-jfx67    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-f6tqr    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-sptwv    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-w7pz8    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-m8mq8    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-m8mq8    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-k4l62    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-sptwv    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-sptwv    Started container p
+27s         Normal    Created             pod/churn-77b65bf587-k4l62    Created container: p
+27s         Normal    Created             pod/churn-77b65bf587-qwqrb    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-qwqrb    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-hmwkl    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-hmwkl    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-l5mw8    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-qj8fr    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-qj8fr    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-spvzd    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-spvzd    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-spvzd    Started container p
+27s         Normal    Started             pod/churn-77b65bf587-w2jrf    Started container p
+27s         Normal    Pulled              pod/churn-77b65bf587-rp8fw    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-zbmx9    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-zbmx9    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-mnhpp    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-mnhpp    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-mnhpp    Started container p
+27s         Normal    Started             pod/churn-77b65bf587-zbhcw    Started container p
+27s         Normal    Pulled              pod/churn-77b65bf587-5vm25    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-5vm25    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-5vm25    Started container p
+27s         Normal    Pulled              pod/churn-77b65bf587-w2jrf    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Pulled              pod/churn-77b65bf587-hh8j9    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-zbhcw    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-zbhcw    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Started             pod/churn-77b65bf587-psrts    Started container p
+27s         Normal    Created             pod/churn-77b65bf587-6v8cf    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-wnwh4    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-wnwh4    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-6v8cf    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-psrts    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-psrts    Container image "registry.k8s.io/pause:3.9" already present on machine
+27s         Normal    Created             pod/churn-77b65bf587-hh8j9    Created container: p
+27s         Normal    Started             pod/churn-77b65bf587-hh8j9    Started container p
+27s         Normal    Created             pod/churn-77b65bf587-k9hjf    Created container: p
+27s         Normal    Pulled              pod/churn-77b65bf587-k9hjf    Container image "registry.k8s.io/pause:3.9" already present on machine
+26s         Normal    Started             pod/churn-77b65bf587-wnwh4    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-k9hjf    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-6v8cf    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-qj8fr    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-l5mw8    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-hmwkl    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-k4l62    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-qwqrb    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-m8mq8    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-rwr2x    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-w7pz8    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-4fghg    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-2z747    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-tzjpg    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-f6tqr    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-wt5jv    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-rp8fw    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-lnlt5    Started container p
+26s         Normal    Started             pod/churn-77b65bf587-gg28x    Started container p
+25s         Normal    Killing             pod/churn-77b65bf587-k9hjf    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-hh8j9    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-lnlt5    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-tzjpg    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-b2ww7    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-rp8fw    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-f6tqr    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-2z747    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-w7pz8    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-4fghg    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-rwr2x    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-m8mq8    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-sptwv    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-qwqrb    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-qj8fr    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-gg28x    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-jfx67    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-zbmx9    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-spvzd    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-w2jrf    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-zbhcw    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-5vm25    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-psrts    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-wnwh4    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-wt5jv    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-k4l62    Stopping container p
+25s         Normal    Killing             pod/churn-77b65bf587-6v8cf    Stopping container p
+24s         Normal    Killing             pod/churn-77b65bf587-mnhpp    Stopping container p
+24s         Normal    Killing             pod/churn-77b65bf587-hmwkl    Stopping container p
+24s         Normal    Killing             pod/churn-77b65bf587-l5mw8    Stopping container p
+20s         Normal    Started             pod/churn-77b65bf587-p2b5b    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-zq9ms    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-hl9c2    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-5r78h    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-7mncw    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-pddf5    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-pddf5    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-pddf5    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-w9jw9    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-7mncw    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-rcjmf    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-7mncw    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-cqdr5    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-rcjmf    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-6szlk    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-6szlk    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-6szlk    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-rcjmf    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-w9jw9    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-6kxt9    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-6kxt9    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-6kxt9    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-8qqrs    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-6hjvl    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-6hjvl    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-6hjvl    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-xdk69    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-tglsf    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-tglsf    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-xdk69    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-h5q4s    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-8qqrs    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-bwlvv    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-h5q4s    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-xdk69    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-h5q4s    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-cqdr5    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-cqdr5    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-w57dx    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-w57dx    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-w9jw9    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-8msc7    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-w57dx    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-p4jfd    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-l2s56    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Started             pod/churn-77b65bf587-8msc7    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-p4jfd    Created container: p
+20s         Normal    Created             pod/churn-77b65bf587-l2s56    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-l2s56    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-9zqg2    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-p2b5b    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-9zqg2    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-9kqmf    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-9kqmf    Created container: p
+20s         Normal    Created             pod/churn-77b65bf587-p2b5b    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-9kqmf    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-9zqg2    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Started             pod/churn-77b65bf587-cvh9n    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-tglsf    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Started             pod/churn-77b65bf587-hl9c2    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-hl9c2    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-5r78h    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-5r78h    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-bwlvv    Created container: p
+20s         Normal    Created             pod/churn-77b65bf587-zq9ms    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-zq9ms    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-p4jfd    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-vn5bz    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-vn5bz    Created container: p
+20s         Normal    Pulled              pod/churn-77b65bf587-vn5bz    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-db2kr    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-db2kr    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-db2kr    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-bwlvv    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-dv6jc    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Started             pod/churn-77b65bf587-8qqrs    Started container p
+20s         Normal    Started             pod/churn-77b65bf587-ckb5x    Started container p
+20s         Normal    Created             pod/churn-77b65bf587-ckb5x    Created container: p
+20s         Normal    Created             pod/churn-77b65bf587-cvh9n    Created container: p
+20s         Normal    Created             pod/churn-77b65bf587-dv6jc    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-dv6jc    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-8msc7    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-ckb5x    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-cvh9n    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Pulled              pod/churn-77b65bf587-lvrrv    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-lvrrv    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-lvrrv    Started container p
+20s         Normal    Pulled              pod/churn-77b65bf587-zwdc5    Container image "registry.k8s.io/pause:3.9" already present on machine
+20s         Normal    Created             pod/churn-77b65bf587-zwdc5    Created container: p
+20s         Normal    Started             pod/churn-77b65bf587-zwdc5    Started container p
+18s         Normal    Killing             pod/churn-77b65bf587-pddf5    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-dv6jc    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-8msc7    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-cqdr5    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-rcjmf    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-p2b5b    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-p4jfd    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-bwlvv    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-db2kr    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-zq9ms    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-8qqrs    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-9kqmf    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-ckb5x    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-lvrrv    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-9zqg2    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-l2s56    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-6szlk    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-7mncw    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-vn5bz    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-h5q4s    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-6kxt9    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-hl9c2    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-tglsf    Stopping container p
+18s         Normal    Killing             pod/churn-77b65bf587-6hjvl    Stopping container p
+17s         Normal    Killing             pod/churn-77b65bf587-xdk69    Stopping container p
+17s         Normal    Killing             pod/churn-77b65bf587-cvh9n    Stopping container p
+17s         Normal    Killing             pod/churn-77b65bf587-w57dx    Stopping container p
+17s         Normal    Killing             pod/churn-77b65bf587-5r78h    Stopping container p
+17s         Normal    Killing             pod/churn-77b65bf587-zwdc5    Stopping container p
+17s         Normal    Killing             pod/churn-77b65bf587-w9jw9    Stopping container p
+13s         Normal    Started             pod/churn-77b65bf587-bvz6v    Started container p
+13s         Normal    Started             pod/churn-77b65bf587-dlhtx    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-4xmzq    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-4xmzq    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-4xmzq    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-5rk85    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-r6xwc    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-r6xwc    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-r6xwc    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-5rk85    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-5rk85    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-652ct    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-652ct    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-652ct    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-662pf    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Pulled              pod/churn-77b65bf587-s6xd8    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-s6xd8    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-s6xd8    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-662pf    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-662pf    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-6ftp7    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-6ftp7    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-6ftp7    Started container p
+13s         Normal    Started             pod/churn-77b65bf587-wszwk    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-wszwk    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-wszwk    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Pulled              pod/churn-77b65bf587-922lg    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-922lg    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-922lg    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-96zz4    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-96zz4    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-96zz4    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-9nbcg    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-9nbcg    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-9nbcg    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-bvz6v    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-bvz6v    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-c5mh4    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-pmjfv    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-pmjfv    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-pmjfv    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-c5mh4    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-c5mh4    Started container p
+13s         Normal    Started             pod/churn-77b65bf587-w74h5    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-w74h5    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-t4b8g    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-t4b8g    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-t4b8g    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-w74h5    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Pulled              pod/churn-77b65bf587-dbnvh    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-p5t5w    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-p5t5w    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-p5t5w    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-dbnvh    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-dbnvh    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-dlhtx    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-dlhtx    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-dr5kc    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-p2vdg    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-p2vdg    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-p2vdg    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-dr5kc    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-mz7gl    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-mz7gl    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-mz7gl    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-dr5kc    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-f9sk7    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-f9sk7    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-f9sk7    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-ghw8w    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Pulled              pod/churn-77b65bf587-tsq4d    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-tsq4d    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-tsq4d    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-ghw8w    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-mfp9k    Started container p
+13s         Normal    Pulled              pod/churn-77b65bf587-ttqc5    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-ttqc5    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-ttqc5    Started container p
+13s         Normal    Started             pod/churn-77b65bf587-ghw8w    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-mfp9k    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-mfp9k    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Pulled              pod/churn-77b65bf587-jkdp7    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-l7cvt    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-l7cvt    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-l7cvt    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Created             pod/churn-77b65bf587-jkdp7    Created container: p
+13s         Normal    Started             pod/churn-77b65bf587-tznkg    Started container p
+13s         Normal    Created             pod/churn-77b65bf587-tznkg    Created container: p
+13s         Normal    Pulled              pod/churn-77b65bf587-tznkg    Container image "registry.k8s.io/pause:3.9" already present on machine
+13s         Normal    Started             pod/churn-77b65bf587-jkdp7    Started container p
+11s         Normal    Killing             pod/churn-77b65bf587-bvz6v    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-mfp9k    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-96zz4    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-mz7gl    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-dbnvh    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-5rk85    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-dr5kc    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-p5t5w    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-pmjfv    Stopping container p
+11s         Normal    Killing             pod/churn-77b65bf587-9nbcg    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-tznkg    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-s6xd8    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-wszwk    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-922lg    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-4xmzq    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-p2vdg    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-ghw8w    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-tsq4d    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-l7cvt    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-f9sk7    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-662pf    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-dlhtx    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-ttqc5    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-c5mh4    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-w74h5    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-t4b8g    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-6ftp7    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-652ct    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-r6xwc    Stopping container p
+10s         Normal    Killing             pod/churn-77b65bf587-jkdp7    Stopping container p
+7s          Normal    ScalingReplicaSet   deployment/churn              Scaled up replica set churn-77b65bf587 from 0 to 30
+6s          Normal    Started             pod/churn-77b65bf587-r4rt9    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-828sh    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-p56gb    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-p56gb    Created container: p
+6s          Normal    Created             pod/churn-77b65bf587-jp5rd    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-p56gb    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-27fv7    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-mglr4    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-27fv7    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-czg9l    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-czg9l    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-czg9l    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-27fv7    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-cwnnh    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-cwnnh    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-cwnnh    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Pulled              pod/churn-77b65bf587-2rc6d    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-csrj7    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-csrj7    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-csrj7    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-2rc6d    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-clnj7    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-clnj7    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-clnj7    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-2rc6d    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-mglr4    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-p6s8g    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-p6s8g    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-mglr4    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-cc5f5    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-w7kcm    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-w7kcm    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-w7kcm    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-r9xdz    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-cc5f5    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-cc5f5    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-r9xdz    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-p6s8g    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-r9xdz    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-v7hqw    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-v7hqw    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-q9nj2    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-q9nj2    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-v7hqw    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-q9nj2    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-jp5rd    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-szk49    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-hdl7k    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-szk49    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-szk49    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Pulled              pod/churn-77b65bf587-5dsbq    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-hdl7k    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-qbqpt    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-qbqpt    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-qbqpt    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-5dsbq    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-r2xp6    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-r2xp6    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-hdl7k    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-5dsbq    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-828sh    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-5k4cl    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Pulled              pod/churn-77b65bf587-828sh    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-5k4cl    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-6pl7z    Started container p
+6s          Normal    Pulled              pod/churn-77b65bf587-x9lq8    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-x9lq8    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-x9lq8    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-5k4cl    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-6pl7z    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-6pl7z    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Pulled              pod/churn-77b65bf587-5nrks    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-r2xp6    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-5nrks    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-r4rt9    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-5nrks    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-67lt6    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-67lt6    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-67lt6    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Pulled              pod/churn-77b65bf587-rz994    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Created             pod/churn-77b65bf587-r4rt9    Created container: p
+6s          Normal    Started             pod/churn-77b65bf587-kp7sg    Started container p
+6s          Normal    Started             pod/churn-77b65bf587-jp5rd    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-kp7sg    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-kp7sg    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-rz994    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-rz994    Created container: p
+6s          Normal    Pulled              pod/churn-77b65bf587-5rsrq    Container image "registry.k8s.io/pause:3.9" already present on machine
+6s          Normal    Started             pod/churn-77b65bf587-5rsrq    Started container p
+6s          Normal    Created             pod/churn-77b65bf587-5rsrq    Created container: p
+5s          Normal    Killing             pod/churn-77b65bf587-hdl7k    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-mglr4    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-kp7sg    Stopping container p
+5s          Normal    ScalingReplicaSet   deployment/churn              Scaled down replica set churn-77b65bf587 from 30 to 0
+5s          Normal    Killing             pod/churn-77b65bf587-q9nj2    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-5nrks    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-rz994    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-p56gb    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-jp5rd    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-5k4cl    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-27fv7    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-6pl7z    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-r9xdz    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-csrj7    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-828sh    Stopping container p
+5s          Normal    Killing             pod/churn-77b65bf587-cc5f5    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-r2xp6    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-szk49    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-p6s8g    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-v7hqw    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-w7kcm    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-2rc6d    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-qbqpt    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-clnj7    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-5dsbq    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-x9lq8    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-cwnnh    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-czg9l    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-5rsrq    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-67lt6    Stopping container p
+4s          Normal    Killing             pod/churn-77b65bf587-r4rt9    Stopping container p

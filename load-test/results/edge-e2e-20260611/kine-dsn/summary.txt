@@ -1,0 +1,35 @@
+== slow-disk sweep (single writer, count=800)
+--- kine-k3s w0ms
+write throughput: 330 writes/s  (800 writes in 2.42s, 1 writers)
+txn RTT ms         2.70     2.95    13.22   112.23   112.23     3.14
+--- kine-bare w0ms
+write throughput: 290 writes/s  (800 writes in 2.76s, 1 writers)
+txn RTT ms         2.96     4.33    10.56    13.71    13.71     3.33
+--- kine-k3s w1ms
+write throughput: 293 writes/s  (800 writes in 2.73s, 1 writers)
+txn RTT ms         2.71     2.96    32.31    79.55    79.55     3.58
+--- kine-bare w1ms
+write throughput: 15 writes/s  (800 writes in 51.78s, 1 writers)
+txn RTT ms        64.02    67.98    68.23    75.83    75.83    64.66
+--- kine-k3s w5ms
+write throughput: 264 writes/s  (800 writes in 3.04s, 1 writers)
+txn RTT ms         2.73     2.99    48.27   109.23   109.23     4.01
+--- kine-bare w5ms
+write throughput: 10 writes/s  (800 writes in 77.17s, 1 writers)
+txn RTT ms        96.01    99.85   100.17   136.03   136.03    96.50
+--- kine-k3s w20ms
+write throughput: 206 writes/s  (800 writes in 3.88s, 1 writers)
+txn RTT ms         2.72     2.98    96.43   206.33   206.33     5.22
+--- kine-bare w20ms
+write throughput: 5 writes/s  (800 writes in 153.77s, 1 writers)
+txn RTT ms       192.00   192.14   196.09   216.29   216.29   192.22
+== concurrency at W=0 (k3s-params DSN, count=1000/writer)
+--- kine-k3s writers=1
+write throughput: 347 writes/s  (1000 writes in 2.88s, 1 writers)
+txn RTT ms         2.79     3.12     3.81    26.54    26.54     2.95
+--- kine-k3s writers=16
+write throughput: 1836 writes/s  (1000 writes in 0.54s, 16 writers)
+txn RTT ms         5.91    11.40    57.95   108.10   108.10     7.63
+--- kine-k3s writers=64
+write throughput: 1477 writes/s  (1000 writes in 0.68s, 64 writers)
+txn RTT ms        19.10    56.07   195.39   366.71   366.71    27.20

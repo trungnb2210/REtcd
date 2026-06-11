@@ -1,0 +1,2 @@
+edge-e2e: N=30 ROUNDS=5 WLIST=(0 20) arms=(retcd etcd sqlite) host=edge arch=aarch64
+k3s version v1.32.5+k3s1 (8e8f2a47)
