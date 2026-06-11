@@ -1,0 +1,25 @@
+40-node three-arm cold-start trace replay — 2026-06-08, CloudLab xl170 x40 (retcd-dev-9)
+Commit afc9956 (v12) / ghcr.io/trungnb2210/retcd:v12; k8s 1.32, Knative 1.15 + Kourier.
+Trace: azure_240 (subset of Dirigent azure_500 artifact), 30 min/arm, exponential IAT,
+seed 42 (identical schedule across arms = paired); images pre-pulled before each arm.
+Arms run back-to-back on the same cluster: REtcd (everysec) -> etcd -> REtcd (always).
+
+Scheduling/cold cost = responseTime - actualDuration (invitro duration CSV, microseconds).
+Raw per-invocation CSVs (~4.5 MB/arm) archived outside the repo in
+research/results-trace-40node-v12/; perfn.csv here is the derived per-function means.
+
+Per-invocation sched cost (ms):
+  backend        total   fail%   p50   p90     p99      p99.9    max
+  REtcd          36185   0.04    4.0   1591.2  17392.3  27981.7  39.8s
+  etcd           36181   0.15    3.9   1419.5  17296.0  28306.2  61.4s
+  REtcd always   36176   0.04    3.9   1791.7  19187.5  29155.8  51.6s
+
+Per-function (mean per function, then percentiles across functions — KUBEDIRECT Fig 12/13):
+  backend        #inv    #fn   slowdown med/p99   sched-ms med/p99
+  REtcd          36169   175   39.7 / 9757.9      9706.9 / 21153.9
+  etcd           36125   173   34.1 / 8883.2      9706.6 / 20865.4
+  REtcd always   36163   175   44.0 / 9628.6      9843.8 / 21709.6
+
+Headline: REtcd vs etcd per-function sched median 9706.9 vs 9706.6 ms (0.3 ms apart),
+p99 +1.4%; durability-matched REtcd-always within ~4% at per-function p99.
+Parity at scale; store (and its durability mode) off the cold-start critical path.

@@ -123,6 +123,29 @@ ax.legend(frameon=False, loc="upper left", ncol=2)
 fig.savefig(FIGDIR / "eval-durability.pdf"); plt.close(fig)
 print("wrote eval-durability.pdf")
 
+# ---- Figure: EQ3 per-function cold-cost CDF, 40-node three-arm replay --------
+# Derived data: results/trace40-20260608-afc9956/perfn.csv (per-function mean
+# scheduling/cold cost over the azure_240 30-min replay; raw invitro CSVs are
+# archived outside the repo, see summary.txt there). Mean per function, then
+# CDF across functions — the KUBEDIRECT Fig 13 convention.
+import csv
+perfn = {}
+with open(ROOT / "load-test" / "results" / "trace40-20260608-afc9956" / "perfn.csv") as fh:
+    for row in csv.DictReader(r for r in fh if not r.startswith("#")):
+        perfn.setdefault(row["backend"], []).append(float(row["sched_ms_mean"]))
+fig, ax = plt.subplots(figsize=(5.0, 3.2))
+for name in ["REtcd", "etcd", "REtcd always"]:
+    st = STYLE_ALWAYS if name == "REtcd always" else STYLE[name]
+    xs = sorted(perfn[name])
+    ys = [(i + 1) / len(xs) for i in range(len(xs))]
+    ax.plot(xs, ys, label=name, lw=st["lw"], ls=st["ls"], color=st["color"])
+ax.set_xscale("log")
+ax.set_xlabel("per-function mean scheduling/cold cost (ms)")
+ax.set_ylabel("CDF (fraction of functions)")
+ax.legend(frameon=False, loc="upper left")
+fig.savefig(FIGDIR / "eval-coldstart-cdf.pdf"); plt.close(fig)
+print("wrote eval-coldstart-cdf.pdf")
+
 # ---- Figure: EQ1 latency CDFs (create / delete), etcd vs REtcd ---------------
 # DISABLED: the only source for this is the May-2026 kind-* runs on a Mac (slow
 # fsync). Per the "no Mac data" decision the steady-state kwok microbench must be
