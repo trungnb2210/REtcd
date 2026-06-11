@@ -1,0 +1,2 @@
+edge-e2e: N=30 ROUNDS=5 WLIST=(0 20) arms=(retcd) host=node0.retcd-dev-11.retcd2210-pg0.utah.cloudlab.us arch=x86_64
+k3s version v1.32.5+k3s1 (8e8f2a47)

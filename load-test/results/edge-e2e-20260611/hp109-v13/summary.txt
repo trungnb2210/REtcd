@@ -1,0 +1,6 @@
+=== retcd-w0 ===
+bringup_s=20.8
+cell done rc=0
+=== retcd-w20 ===
+bringup_s=19.7
+cell done rc=0
