@@ -46,13 +46,16 @@ throughput = {
     "kine + SQLite":  [ 378,   50,    25],
     "etcd":           [1181, 14969, 23971],
 }
-fig, ax = plt.subplots(figsize=(5.6, 3.2))
+# 5.0x3.2 with the legend inside (lower left is empty): keeps the saved canvas
+# the same size as the other single-panel eval figures, so they all print at
+# 0.72\linewidth with identical font sizes
+fig, ax = plt.subplots(figsize=(5.0, 3.2))
 for name, ys in throughput.items():
     ax.plot(writers, ys, label=name, markersize=5, **STYLE[name])
 ax.set_xscale("log", base=2); ax.set_yscale("log")
 ax.set_xticks(writers); ax.set_xticklabels(writers)
 ax.set_xlabel("concurrent writers"); ax.set_ylabel("throughput (txn/s)")
-ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.02, 1.0))
+ax.legend(frameon=False, loc="lower left")
 ax.annotate("collapses", xy=(64, 25), xytext=(20, 60),
             fontsize=7.5, color=STYLE["kine + SQLite"]["color"])
 ax.annotate("scale (etcd best)", xy=(64, 23971), xytext=(3.5, 20000),
