@@ -60,7 +60,10 @@ func main() {
 		}
 		if resp.Succeeded {
 			last = i
-			if i%1000 == 0 {
+			// fine-grained milestones: when the writer runs ON the crashing host
+			// with stdout streamed off-host over ssh, the last milestone received
+			// is the (slightly conservative) acked count that survives the crash
+			if i%500 == 0 {
 				fmt.Printf("acked=%d\n", i)
 			}
 		}
