@@ -24,7 +24,7 @@ func (s *KVServer) Range(ctx context.Context, req *pb.RangeRequest) (*pb.RangeRe
 	var rev int64
 
 	if rangeEnd == "" {
-		// Single key lookup — pipeline GET + revision in one round-trip.
+		// Single key lookup — two sequential round-trips: GET key, then GET revisionKey.
 		kv, err := s.store.Get(ctx, key)
 		if err != nil {
 			return nil, err
